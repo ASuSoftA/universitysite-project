@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <article>
+        <h1>{{ post.title }}</h1>
+        <small class="text-muted">نشر في {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+        
+        {% if post.images %}
+        <!-- سلايدر الصور -->
+        <div class="swiper post-swiper mt-4">
+            <div class="swiper-wrapper">
+                {% for image in post.images %}
+                <div class="swiper-slide">
+                    <img src="{{ url_for('static', filename='uploads/images/' + image.filename) }}" 
+                         class="img-fluid rounded"
+                         alt="صورة المنشور {{ post.title }}"
+                         style="max-height: 500px; object-fit: contain;">
+                </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+        {% endif %}
+        
+        <div class="post-content mt-4">
+            {{ post.content|safe }}
+        </div>
+    </article>
+    
+    <div class="mt-4">
+        <!-- تم تعديل endpoint ليتوافق مع Blueprint -->
+        <a href="{{ url_for('admin_control.manage_posts') }}" class="btn btn-secondary">العودة إلى القائمة</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const swiper = new Swiper('.post-swiper', {
+        direction: 'horizontal',
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        autoplay: {
+            delay: 5000,
+        },
+        effect: 'slide',
+        speed: 600
+    });
+});
+</script>
+{% endblock %}

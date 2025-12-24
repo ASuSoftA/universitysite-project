@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}تعديل الملف الشخصي - {{ current_user.username }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>تعديل الملف الشخصي</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <img src="{% if current_user.profile_image and current_user.profile_image != 'default_profile.png' %}{{ url_for('static', filename='uploads/images/' + current_user.profile_image) }}{% else %}{{ url_for('static', filename='images/default_profile.png') }}{% endif %}" 
+                         class="rounded-circle mb-3" width="150" height="150" alt="صورة البروفايل"
+                         onerror="this.src='https://via.placeholder.com/150/3498db/ffffff?text=👤'">
+                    <br>
+                    <label for="profile_image" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-camera"></i> تغيير الصورة
+                    </label>
+                </div>
+                
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="file" id="profile_image" name="profile_image" accept="image/*" hidden
+                           onchange="this.form.submit()">
+                </form>
+                
+                <div class="user-info">
+                    <div class="mb-3">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" class="form-control" value="{{ current_user.username }}" readonly>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">صلاحية المدير</label>
+                        <input type="text" class="form-control" value="{{ 'نعم' if current_user.is_admin else 'لا' }}" readonly>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">صلاحية إضافة المنشورات</label>
+                        <input type="text" class="form-control" value="{{ 'نعم' if current_user.can_post else 'لا' }}" readonly>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">حالة الحساب</label>
+                        <input type="text" class="form-control" value="{{ 'نشط' if current_user.is_active else 'معطل' }}" readonly>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="{% if request.args.get('from_admin') %} 
+            {{ url_for('admin_control.dashboard') }} 
+         {% else %} 
+            {{ url_for('user_control.dashboard') }} 
+         {% endif %}"
+   class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> العودة للوحة التحكم
+</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

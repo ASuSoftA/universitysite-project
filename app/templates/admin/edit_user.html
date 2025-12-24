@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}تعديل مستخدم - لوحة التحكم{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>تعديل مستخدم: {{ user.username }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3 text-center">
+                        <img src="{{ url_for('static', filename='uploads/images/' + user.profile_image) if user.profile_image != 'default_profile.png' else url_for('static', filename='images/default_profile.png') }}"
+                            class="rounded-circle mb-3" width="120" height="120" alt="صورة البروفايل">
+                        <br>
+                        <label for="profile_image" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-camera"></i> تغيير الصورة
+                            <input type="file" id="profile_image" name="profile_image" accept="image/*" hidden>
+                        </label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">اسم المستخدم</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            value="{{ user.username }}" required>
+                    </div>
+{% if current_user.is_super_admin %}
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">كلمة المرور الجديدة (اختياري)</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password"
+                            placeholder="اتركها فارغة للحفاظ على كلمة المرور الحالية">
+                        <div class="form-text">يجب أن تكون على الأقل 6 أحرف</div>
+                    </div>
+{% endif %}
+
+                    {% if current_user.is_super_admin %}
+<div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="is_admin" name="is_admin" {{ 'checked' if user.is_admin }}>
+    <label class="form-check-label" for="is_admin">صلاحية مدير</label>
+</div>
+{% endif %}
+
+{% if current_user.is_admin or current_user.is_super_admin %}
+<div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="can_post" name="can_post"
+           {{ 'checked' if user.can_post }}>
+    <label class="form-check-label" for="can_post">
+        صلاحية إضافة المنشورات
+    </label>
+</div>
+
+<div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="can_upload_books" name="can_upload_books"
+           {{ 'checked' if user.can_upload_books }}>
+    <label class="form-check-label" for="can_upload_books">
+        صلاحية نشر الكتب في المكتبة
+    </label>
+</div>
+{% endif %}
+
+
+                    <div class="mb-3">
+                        <span class="badge bg-{{ 'success' if user.is_active else 'secondary' }}">
+                            {{ 'نشط' if user.is_active else 'غير نشط' }}
+                        </span>
+                        <span class="badge bg-{{ 'info' if user.is_admin else 'secondary' }} ms-2">
+                            {{ 'مدير' if user.is_admin else 'مستخدم' }}
+                        </span>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex">
+                        <button type="submit" class="btn btn-primary me-md-2">
+                            <i class="bi bi-check-circle"></i> حفظ التعديلات
+                        </button>
+                        <a href="{{ url_for('admin_control.manage_users') }}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> إلغاء
+                        </a>
+                        {% if user.id != current_user.id %}
+                        <a href="{{ url_for('admin_control.toggle_user_active', user_id=user.id) }}"
+                            class="btn btn-{{ 'warning' if user.is_active else 'success' }} ms-md-2"
+                            onclick="return confirm('هل أنت متأكد من {{ 'تعطيل' if user.is_active else 'تفعيل' }} هذا المستخدم؟')">
+                            <i class="bi bi-{{ 'person-x' if user.is_active else 'person-check' }}"></i>
+                            {{ 'تعطيل' if user.is_active else 'تفعيل' }}
+                        </a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

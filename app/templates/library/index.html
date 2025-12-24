@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}المكتبة الرقمية - جامعة{% endblock %}
+
+{% block content %}
+<div class="container ">
+    <!-- شريط البحث -->
+    <div class="row mb-2">
+        <div class="col-12">
+            <form method="GET" class="d-flex">
+                <input type="text" name="q" value="{{ current_search or '' }}" placeholder="ابحث عن كتاب أو ملف..." 
+                       class="form-control search-input" />
+                <button type="submit" class="btn btn-primary ms-2"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- شريط الفلترة -->
+    <div class="row mb-3">
+        <form method="GET" class="d-flex flex-wrap gap-2 align-items-center filter-form">
+            <input type="hidden" name="q" value="{{ current_search or '' }}">
+
+            <!-- فلتر النوع -->
+            <select name="type" class="form-select form-select-sm w-auto filter-select">
+                <option value="all" {% if current_type == 'all' %}selected{% endif %}>جميع الأنواع</option>
+                <option value="book" {% if current_type == 'book' %}selected{% endif %}>كتب</option>
+                <option value="handout" {% if current_type == 'handout' %}selected{% endif %}>ملازم</option>
+                <option value="exam" {% if current_type == 'exam' %}selected{% endif %}>امتحانات</option>
+                <option value="notes" {% if current_type == 'notes' %}selected{% endif %}>ملاحظات</option>
+            </select>
+
+            <!-- فلتر المادة -->
+            <select name="course" class="form-select form-select-sm w-auto filter-select">
+                <option value="">جميع المواد</option>
+                {% for course in courses %}
+                <option value="{{ course }}" {% if current_course == course %}selected{% endif %}>{{ course }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- فلتر الفصل -->
+            <select name="semester" class="form-select form-select-sm w-auto filter-select">
+                <option value="">جميع الفصول</option>
+                <option value="first" {% if current_semester == 'first' %}selected{% endif %}>الفصل الأول</option>
+                <option value="second" {% if current_semester == 'second' %}selected{% endif %}>الفصل الثاني</option>
+            </select>
+
+            <!-- فلتر الكلية -->
+<select name="faculty" class="form-select form-select-sm w-auto filter-select">
+    <option value="">جميع الكليات</option>
+    {% for faculty in faculties %}
+    <option value="{{ faculty.id }}" {% if current_faculty == faculty.id %}selected{% endif %}>{{ faculty.name }}</option>
+{% endfor %}
+</select>
+
+
+            <button type="submit" class="btn btn-primary btn-sm filter-btn">
+                <i class="fas fa-filter"></i> <span>تصفية</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- عرض الملفات بشكل قائمة -->
+    {% if files.items %}
+    <div class="list-group">
+        {% for file in files.items %}
+        <div class="list-group-item mb-2 list-card animate-card d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between">
+            <div class="d-flex align-items-center gap-3 mb-2 mb-sm-0">
+                <!-- أيقونة الملف حسب النوع -->
+                <i class="fas 
+                    {% if file.filename.endswith('.pdf') %}fa-file-pdf text-danger
+                    {% elif file.filename.endswith('.doc') or file.filename.endswith('.docx') %}fa-file-word text-primary
+                    {% elif file.filename.endswith('.xls') or file.filename.endswith('.xlsx') %}fa-file-excel text-success
+                    {% else %}fa-file text-secondary
+                    {% endif %} 
+                    fa-2x file-icon"></i>
+
+                <div class="file-info">
+                    <h6 class="mb-1 file-title">{{ file.title }}</h6>
+        
+                    {% if file.course %}<small class="fw-bold text-muted">{{ file.course }}</small>{% endif %}
+
+                    {% if file.faculty %}<small class="text-muted">• {{ file.faculty.name }}</small>{% endif %}
+                    <div class="text-muted file-meta">
+                        {{ file.file_size|filesizeformat }} • {{ file.created_at.strftime('%Y-%m-%d') }} • {{ file.download_count }} <i class="fas fa-download"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="file-actions d-flex gap-2">
+                <a href="{{ url_for('library.download_file', file_id=file.id) }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-download"></i>
+                </a>
+                <a href="{{ url_for('library.file_details', file_id=file.id) }}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-info-circle"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- التصفح -->
+    <nav aria-label="Page navigation" class="mt-3">
+        <ul class="pagination justify-content-center">
+            {% if files.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('library.library', page=files.prev_num, type=current_type, course=current_course, semester=current_semester, q=current_search, faculty=current_faculty) }}">السابق</a>
+            </li>
+            {% endif %}
+            
+            {% for page_num in files.iter_pages() %}
+            <li class="page-item {% if page_num == files.page %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('library.library', page=page_num, type=current_type, course=current_course, semester=current_semester, q=current_search, faculty=current_faculty) }}">{{ page_num }}</a>
+            </li>
+            {% endfor %}
+            
+            {% if files.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('library.library', page=files.next_num, type=current_type, course=current_course, semester=current_semester, q=current_search, faculty=current_faculty) }}">التالي</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+        <p class="text-muted">لا توجد ملفات متاحة حالياً</p>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('library.upload_file') }}" class="btn btn-primary">كن أول من يرفع ملف</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+

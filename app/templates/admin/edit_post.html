@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}تعديل المنشور - لوحة التحكم{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>تعديل المنشور</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">عنوان المنشور</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">المحتوى</label>
+                        <textarea class="form-control" id="content" name="content" rows="5">{{ post.content }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="post_type" class="form-label">نوع المنشور</label>
+                        <select class="form-select" id="post_type" name="post_type">
+                            <option value="text" {% if post.post_type == 'text' %}selected{% endif %}>نص</option>
+                            <option value="image" {% if post.post_type == 'image' %}selected{% endif %}>صورة</option>
+                            <option value="video" {% if post.post_type == 'video' %}selected{% endif %}>فيديو</option>
+                        </select>
+                    </div>
+                    
+                    {% if post.image_path %}
+                    <div class="mb-3">
+                        <label class="form-label">الصورة الحالية</label>
+                        <div>
+                            <img src="{{ url_for('static', filename='uploads/images/' + post.image_path) }}" 
+                                 class="img-fluid rounded" style="max-height: 200px;">
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3" id="image-field">
+                        <label for="image" class="form-label">تغيير الصورة</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    </div>
+                    
+                    {% if post.video_path %}
+                    <div class="mb-3">
+                        <label class="form-label">الفيديو الحالي</label>
+                        <div>
+                            <video controls class="w-100" style="max-height: 200px;">
+                                <source src="{{ url_for('static', filename='uploads/videos/' + post.video_path) }}" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3" id="video-field">
+                        <label for="video" class="form-label">تغيير الفيديو</label>
+                        <input type="file" class="form-control" id="video" name="video" accept="video/*">
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_published" name="is_published" {% if post.is_published %}checked{% endif %}>
+                        <label class="form-check-label" for="is_published">نشر</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">تحديث المنشور</button>
+                    <a href="{{ url_for('admin_control.manage_posts') }}" class="btn btn-secondary">إلغاء</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// إظهار/إخفاء حقول الملفات حسب النوع
+document.getElementById('post_type').addEventListener('change', function() {
+    const type = this.value;
+    document.getElementById('image-field').style.display = type === 'image' ? 'block' : 'none';
+    document.getElementById('video-field').style.display = type === 'video' ? 'block' : 'none';
+});
+
+// تهيئة أولية
+document.addEventListener('DOMContentLoaded', function() {
+    const type = document.getElementById('post_type').value;
+    document.getElementById('image-field').style.display = type === 'image' ? 'block' : 'none';
+    document.getElementById('video-field').style.display = type === 'video' ? 'block' : 'none';
+});
+</script>
+{% endblock %}

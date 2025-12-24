@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}رفع ملف إلى المكتبة - جامعة{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card">
+                <div class="card-header">
+                    <h4>رفع ملف جديد إلى المكتبة</h4>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+    <label class="form-label">الكلية</label>
+    {% if current_user.is_super_admin %}
+    {{ form.faculty(class="form-select") }}
+{% else %}
+    <input type="text" class="form-control" value="{{ current_user.faculty.name }}" readonly>
+    <input type="hidden" name="faculty" value="{{ current_user.faculty_id }}">
+{% endif %}
+
+</div>
+                        {# ===== عنوان الملف ===== #}
+                        <div class="mb-3">
+                            {{ form.title.label(class="form-label") }}
+                            {{ form.title(class="form-control") }}
+                            {% for error in form.title.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        {# ===== الوصف ===== #}
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows=3) }}
+                            {% for error in form.description.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="row">
+                            {# ===== نوع الملف ===== #}
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.file_type.label(class="form-label") }}
+                                    {{ form.file_type(class="form-select") }}
+                                    {% for error in form.file_type.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            {# ===== المادة ===== #}
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.course.label(class="form-label") }}
+                                    {{ form.course(class="form-control") }}
+                                    {% for error in form.course.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            {# ===== الفصل الدراسي ===== #}
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.semester.label(class="form-label") }}
+                                    {{ form.semester(class="form-select") }}
+                                    {% for error in form.semester.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            {# ===== الملف ===== #}
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.file.label(class="form-label") }}
+                                    {{ form.file(class="form-control") }}
+                                    {% for error in form.file.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                    <div class="form-text">
+                                        الامتدادات المسموحة:
+                                        PDF, Word, PowerPoint, Excel, ZIP, RAR
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# ===== نشر فوري ===== #}
+                        <div class="mb-3 form-check">
+                            {{ form.is_published(class="form-check-input") }}
+                            {{ form.is_published.label(class="form-check-label") }}
+                        </div>
+
+                        {# ===== أزرار التحكم ===== #}
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> رفع الملف
+                            </button>
+
+                            <a href="{{ url_for(
+                                    'admin_control.dashboard'
+                                    if request.args.get('from_admin')
+                                    else 'user_control.dashboard'
+                                ) }}"
+                               class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> العودة
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

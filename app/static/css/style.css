@@ -1,0 +1,934 @@
+
+/*style.css*/
+/* ===== الأساسيات ===== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+body, .container {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* ===== شريط التنقل ===== */
+.navbar {
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%) !important;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: white !important;
+}
+
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover {
+    color: white !important;
+}
+
+/* ===== البطاقات ===== */
+.card {
+    border: none;
+    border-radius: 8px;
+    background: white;
+    margin-bottom: 25px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 12px 15px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* ===== محتوى البطاقة ===== */
+.card-content {
+    max-height: 400px;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-content.expanded {
+    max-height: none;
+}
+
+.read-more {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, white);
+    padding: 20px 0 10px 0;
+    text-align: center;
+}
+
+.read-more-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+.card-text {
+    line-height: 1.6;
+    color: #1c1e21;
+    font-size: 15px;
+}
+
+.card-title {
+    font-weight: 600;
+    color: #1c1e21;
+    margin-bottom: 8px;
+}
+
+/* ===== التفاعلات ===== */
+.interaction-buttons {
+    display: flex;
+    border-top: 1px solid #e4e6eb;
+    padding: 8px 0;
+}
+
+.interaction-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    color: #65676b;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.interaction-btn:hover {
+    background: #f0f2f5;
+}
+
+/* ===== الأزرار ===== */
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 10px 20px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #2471a3 100%);
+    transform: translateY(-2px);
+}
+
+/* ===== وسائط (صور + فيديو) ===== */
+/* === تعديل حاوية الوسائط لتكون بدون خلفيات أو فراغات === */
+.media-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    /* إزالة اللون الخلفي */
+    margin: 0;
+    padding: 0;
+}
+
+/* === جعل الصور والفيديوهات تملأ الحاوية بالكامل === */
+.media-container img,
+.media-container video,
+
+.media-wrapper {
+    position: relative;
+    width: 100%;
+    background: #f0f2f5;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 -1rem;
+    width: calc(100% + 2rem);
+}
+
+.media-wrapper:hover {
+    opacity: 0.95;
+}
+
+/* ===== المحتوى المختصر ===== */
+.content-preview {
+    max-height: 100px;
+    overflow: hidden;
+    position: relative;
+}
+
+.content-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(transparent, white);
+}
+
+.content-expanded {
+    max-height: none;
+}
+
+.content-expanded::after {
+    display: none;
+}
+
+/* ===== الجداول ===== */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.table th {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-weight: 600;
+}
+
+.table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-color: #e9ecef;
+}
+
+
+/* ===== التنبيهات ===== */
+.alert,
+.custom-alert {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+}
+
+/* ===== الحقول ===== */
+.form-control,
+.form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* ===== التذييل ===== */
+footer {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+    color: white;
+    margin-top: 40px;
+}
+
+/* ===== الشريط الجانبي ===== */
+.sidebar-stats {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.sidebar-stats h5 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f2f6;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* ===== تحسينات أخرى ===== */
+.profile-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.post-badge {
+    display: none !important;
+}
+
+.post-date {
+    color: white !important;
+    font-size: 0.8rem;
+    font-weight: 400;
+    opacity: 0.9;
+    display: inline-flex;
+    align-items: center;
+}
+
+.post-date i {
+    margin-right: 4px;
+}
+
+.bi {
+    transition: transform 0.2s ease;
+}
+
+.btn:hover .bi {
+    transform: scale(1.1);
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== استجابة الجوال ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        margin-top: 20px;
+        border-radius: 10px;
+    }
+
+    .navbar-brand {
+        font-size: 1.3rem;
+    }
+
+    .btn {
+        padding: 12px 20px;
+    }
+
+    .stat-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stat-value {
+        margin-top: 5px;
+    }
+
+    .media-container {
+        border-radius: 8px;
+        max-height: 400px;
+    }
+
+    .media-container video {
+        max-height: 400px;
+    }
+}
+
+.back-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #3498db;
+}
+
+
+.simple-ai-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #2c3e50;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.simple-ai-link:hover {
+    background-color: #3498db;
+    color: #fff !important;
+}
+
+.carousel-img {
+    height: 400px;
+    object-fit: cover;
+    filter: brightness(90%);
+}
+
+.carousel-caption h3 {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    color: #fff;
+}
+
+.carousel-caption p {
+    font-size: 1rem;
+    color: #f8f9fa;
+}
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-img {
+    height: 400px;
+    object-fit: cover;
+    filter: brightness(75%);
+}
+
+.carousel-caption {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+}
+
+.caption-bg {
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    max-width: 80%;
+}
+
+.caption-bg h2 {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.caption-bg p {
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: #0d6efd;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1) brightness(2);
+}
+
+/* ===== السلايدر ===== */
+#universityCarousel {
+    width: 100%;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+    /* محاذاة عمودية لمحتوى السلايدر */
+}
+
+/* تأكد من أن مؤشرات السلايدر تظهر داخل السلايدر نفسه */
+#universityCarousel .carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    /* المسافة من أسفل الصورة */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    margin: 0;
+}
+
+/* إصلاح أي مشكلة تجعل المؤشرات تنزاح للأسفل */
+#universityCarousel {
+    position: relative;
+}
+
+/* ضبط حجم المؤشرات ولونها */
+#universityCarousel .carousel-indicators [data-bs-target] {
+    background-color: #0d6efd;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.carousel-img {
+    width: 100%;
+    height: 70vh;
+    /* يمكنك تغيير الارتفاع حسب الرغبة */
+    object-fit: cover;
+    /* لجعل الصورة تغطي المساحة بالكامل بدون تشويه */
+    filter: brightness(75%);
+}
+
+.carousel-caption {
+    position: absolute;
+    right: 5%;
+    left: 11%;
+    text-align: center;
+    /* لتوسيط النصوص داخل العنصر */
+    z-index: 10;
+    width: 90%;
+    /* ليكون النص أوسع */
+    bottom: 20px !important;   /* الموقع من الأسفل */
+    top: auto !important;      /* إلغاء التمركز التلقائي */
+}
+.caption-bg {
+    background: rgba(0, 0, 0, 0.4);
+    /* أكثر شفافية */
+    color: #fff;
+    padding: 18px 12px;
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    display: inline-block;
+    max-width: 100%;
+    /* كي لا يُضغط النص */
+}
+
+.caption-bg h2 {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 5px;
+    white-space: normal;
+    /* يمنع تكسير غير ضروري */
+}
+
+.caption-bg p {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #f8f9fa;
+}
+
+
+
+/* مركز الأسهم عموديًا على كامل ارتفاع السلايدر */
+#universityCarousel .carousel-control-prev,
+#universityCarousel .carousel-control-next {
+    position: absolute;
+    /* التأكد أنها فوق الصور */
+    top: 50%;
+    /* منتصف ارتفاع السلايدر */
+    transform: translateY(-50%);
+    /* يعوض نصف ارتفاع العنصر */
+    z-index: 20;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* أيقونات الأسهم */
+#universityCarousel .carousel-control-prev-icon,
+#universityCarousel .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-size: 50% 50%;
+}
+
+/* ===== تجاوب السلايدر ===== */
+
+@media (max-width: 480px) {
+    .carousel-img {
+        height: 450px;
+    }
+
+    .caption-bg h2 {
+        font-size: 1.1rem;
+    }
+
+    .caption-bg p {
+        font-size: 0.8rem;
+    }
+}
+
+/* إزالة أي مسافة بين الشريط والسلايدر */
+.navbar {
+    margin-bottom: 0 !important;
+}
+
+#universityCarousel {
+    margin-top: 0 !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* إزالة أي فراغ من أول عنصر بعد الـnavbar */
+.navbar+* {
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+
+/* جعل الصور تتناسب مع جميع الشاشات */
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* تصغير حجم النص في الهواتف */
+@media (max-width: 768px) {
+    .carousel-caption h3 {
+        font-size: 20px;
+    }
+    .carousel-caption p {
+        font-size: 14px;
+    }
+}
+
+/* تصغير أكثر للشاشات الصغيرة جدًا */
+@media (max-width: 576px) {
+    .carousel-caption h3 {
+        font-size: 18px;
+    }
+    .carousel-caption p {
+        font-size: 12px;
+    }
+}
+
+/* توسيع container في الشاشات الكبيرة */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 100% !important;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+}
+
+
+/* ===== قائمة المشاركة ===== */
+
+.share-wrapper {
+    position: relative;
+}
+
+.share-options {
+    display: none;
+    position: absolute;
+    bottom: 110%;
+    right: 0;
+    width: 210px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    z-index: 9999;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.share-options.show-menu {
+    display: grid !important;
+}
+
+.share-options button {
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+}
+
+.share-options button:hover {
+    background: #f0f0f0;
+    transform: scale(1.1);
+}
+
+/* أنيميشن */
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.posts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* أو إذا تستخدم grid */
+.posts-container.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; /* مسافة بين الصفوف والأعمدة */
+}
+
+/* ===== البطاقات ===== */
+.post-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ===== الفوتر ===== */
+.card-footer {
+    padding: 0.5rem 1rem;
+}
+.card-footer .d-flex {
+    align-items: center;
+    gap: 0.3rem;
+}
+/* =========================================================
+   أزرار التفاعل (إعجاب – مشاركة – تعليق)
+========================================================= */
+
+.like-btn,
+.share-btn,
+.comment-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+/* تأثير hover */
+.like-btn:hover,
+.share-btn:hover,
+.comment-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================================
+   زر الإعجاب
+========================================================= */
+
+.like-btn {
+    overflow: hidden; /* ضروري لتأثير burst */
+}
+
+/* حالة الإعجاب */
+.like-btn.active-like {
+    background-color: #0d6efd;
+    color: #fff;
+    border-color: #0d6efd;
+}
+
+/* أيقونة الإعجاب */
+.like-icon {
+    font-size: 18px;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.like-btn.active-like .like-icon {
+    color: #fff;
+    transform: scale(1.2);
+}
+
+/* عداد الإعجابات */
+.likes-count {
+    font-weight: 600;
+    margin-left: 0.3rem;
+}
+
+/* =========================================================
+   تأثير الانفجار (Burst)
+========================================================= */
+
+.like-btn.burst::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(13, 110, 253, 0.25);
+    animation: burst 0.4s forwards;
+    z-index: 1;
+}
+
+@keyframes burst {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* =========================================================
+   زر المشاركة
+========================================================= */
+
+.share-btn.copied {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: #fff;
+    border-color: #27ae60;
+}
+
+/* =========================================================
+   الصور والفيديو
+========================================================= */
+
+.post-image img,
+.post-video video {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* =========================================================
+   تحسينات العرض
+========================================================= */
+
+.post-content,
+.post-card,
+.card-body {
+    overflow: visible !important;
+}
+
+/* إخفاء نص الأزرار في الشاشات الصغيرة */
+@media (max-width: 767px) {
+    .like-btn span,
+    .share-btn span,
+    .comment-btn span {
+        display: none;
+    }
+}
+
+/* شريط البحث */
+.search-input { height: 50px; font-size: 0.85rem; }
+
+/* شريط الفلترة */
+.filter-select { height: 32px; font-size: 0.8rem; min-width: 90px; }
+
+/* زر التصفية */
+.filter-btn { height: 32px; font-size: 0.8rem; padding: 0 8px; }
+
+/* البطاقات بشكل قائمة */
+.list-card { border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; transition: all 0.3s ease; }
+.list-card:hover { background-color: #f8f9fa; transform: translateY(-2px); }
+
+/* أيقونة الملف */
+.file-icon { min-width: 40px; }
+
+/* شريط الفلترة دائمًا أفقي على جميع الهواتف */
+.filter-form {
+    display: flex !important;
+    flex-wrap: nowrap !important;  /* منع الالتفاف */
+    overflow-x: auto;              /* تمكين التمرير الأفقي */
+    gap: 9px;
+    align-items: center;
+    -webkit-overflow-scrolling: touch; /* لتمرير سلس على iOS */
+}
+
+.filter-select, .filter-btn {
+    flex: 0 0 auto;       /* تمنع التمدد */
+    height: 30px;         /* تصغير الارتفاع */
+    font-size: 0.75rem;   /* حجم أصغر للنص */
+    min-width: 60px;      /* تقليل الحد الأدنى للعرض */
+    padding: 0 6px;       /* تصغير الحشو الداخلي */
+}
+
+.filter-btn span { display: inline; }  /* نص الزر يظهر دائمًا */
+
+/* تقليل المسافة بين شريط البحث والفلاتر */
+.row.search-row { margin-bottom: 4px; }  /* بدلاً من mb-2 */
+.row.filter-row { margin-bottom: 8px; }  /* بدلاً من mb-3 */
+
+/* تأثير ظهور لطيف للقائمة */
+.animate-card { opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s forwards; }
+@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+/* تحسين شريط الفلترة ليبقى أفقي على الهاتف */
+@media (max-width: 576px) {
+    .filter-form { flex-wrap: nowrap !important; overflow-x: auto; gap: 6px; }
+    .filter-select, .filter-btn { flex: 0 0 auto; font-size: 0.75rem; min-width: 80px; height: 32px; }
+    .filter-btn span { display: inline; } /* الآن يظهر نص الزر */
+}
+
+/* تحسين البطاقات لتكون عمودية على الهواتف */
+@media (max-width: 576px) {
+    .list-card { flex-direction: row; align-items: center; }
+    .file-actions { margin-top: 0; margin-left: auto; }
+}
+

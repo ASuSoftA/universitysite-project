@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة تحكم المستخدم - {{ current_user.username }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">لوحة تحكم المستخدم</h2>
+            <span class="badge bg-primary">{{ current_user.username }}</span>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <!-- بطاقات الإحصائيات -->
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <i class="bi bi-file-text display-4 mb-2"></i>
+                <h5 class="card-title">منشوراتي</h5>
+                <h2>{{ user_stats.my_posts }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <i class="bi bi-heart display-4 mb-2"></i>
+                <h5 class="card-title">إعجابات منشوراتي</h5>
+                <h2>{{ user_stats.my_likes }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <i class="bi bi-eye display-4 mb-2"></i>
+                <h5 class="card-title">مشاهدات منشوراتي</h5>
+                <h2>{{ user_stats.my_views }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>الإجراءات المتاحة</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2 d-md-flex">
+                                    {% if current_user.can_create_posts() %}
+                                    <a href="{{ url_for('user_control.new_post') }}" class="btn btn-primary me-md-2">
+                                        <i class="bi bi-plus-circle"></i> إضافة منشور جديد
+                                    </a>
+                                    {% else %}
+                                    <button class="btn btn-secondary me-md-2" disabled>
+                                        <i class="bi bi-plus-circle"></i> غير مصرح بإضافة منشورات
+                                    </button>
+                                    {% endif %}
+
+                                    {% if current_user.can_upload_books %}
+                                    <a href="{{ url_for('library.upload_file') }}" class="btn btn-primary me-md-2">
+                                       <i class="bi bi-person-plus"></i> رفع كتاب إلى المكتبة
+                                    </a>
+                                    {% endif %}
+
+                                    <a href="{{ url_for('user_control.edit_profile') }}"
+                                        class="btn btn-warning me-md-2">
+                                        <i class="bi bi-person-gear"></i> تعديل الملف الشخصي
+                                    </a>
+
+                                    <a href="{{ url_for('user_control.change_password') }}" class="btn btn-info">
+                                        <i class="bi bi-key"></i> تغيير كلمة المرور
+                                    </a>
+                                </div>
+
+                                {% if not current_user.can_create_posts() %}
+                                <div class="alert alert-warning mt-3">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                    ليس لديك صلاحية لإضافة المنشورات. يرجى التواصل مع المدير.
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- منشوراتي الأخيرة -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>آخر منشوراتي</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if my_posts %}
+                                <div class="list-group">
+                                    {% for post in my_posts %}
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">{{ post.title or 'بدون عنوان' }}</h6>
+                                                <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M')
+                                                    }}</small>
+                                                <br>
+                                                <small class="text-muted">
+                                                    {% if post.post_type == 'image' %}
+                                                    <i class="bi bi-image text-primary"></i> صورة
+                                                    {% elif post.post_type == 'video' %}
+                                                    <i class="bi bi-play-btn text-success"></i> فيديو
+                                                    {% else %}
+                                                    <i class="bi bi-text-paragraph text-info"></i> نص
+                                                    {% endif %}
+                                                </small>
+                                            </div>
+                                            <div>
+                                                <span
+                                                    class="badge bg-{{ 'success' if post.is_published else 'secondary' }} me-2">
+                                                    {{ 'منشور' if post.is_published else 'مسودة' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-info">
+                                        {{ 'نص' if post.post_type == 'text' else 'صورة' if post.post_type ==
+                                        'image' else 'فيديو' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-inbox display-4 text-muted mb-3"></i>
+                        <p class="text-muted">لا توجد منشورات حتى الآن</p>
+                        {% if current_user.can_create_posts() %}
+                        <a href="{{ url_for('user_control.new_post') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> أضف أول منشور
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

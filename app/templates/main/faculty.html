@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}منشورات {{ faculty_name }}{% endblock %}
+
+{% block content %}
+
+<!-- ===== الهيدر ===== -->
+<div class="faculty-header text-center">
+
+    <!-- صورة الغلاف -->
+    <img src="{{ url_for('static', filename='uploads/faculties/' ~ faculty.cover_image) }}"
+         class="faculty-cover img-fluid"
+         alt="صورة الغلاف">
+
+    <!-- الشعار دائري مع ظل وتوهج -->
+    <img src="{{ url_for('static', filename='uploads/faculties/' ~ faculty.logo_image) }}"
+         class="faculty-logo rounded-circle"
+         alt="شعار الكلية">
+
+    <!-- النص فوق الغلاف -->
+    <div class="faculty-text">
+        <h1>{{ faculty.name }}</h1>
+        {% if faculty.description %}
+            <p>{{ faculty.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- ===== الخط المتموج أسفل الهيدر ===== 
+<div class="wave-divider">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,0 C480,100 960,0 1440,100 L1440,0 L0,0 Z" style="fill:white;"></path>
+    </svg>
+</div>-->
+
+<style>
+.faculty-header {
+    position: relative;
+    width: 100%;
+    overflow: visible; /* اجعل الهيدر يسمح للشعار بالخروج */
+}
+
+/* صورة الغلاف */
+.faculty-cover {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+/* الشعار دائري مع ظل وتوهج */
+.faculty-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 4px solid white;
+    position: absolute;
+    bottom: -60px;  /* الشعار يظهر نصفه أسفل الغلاف */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    z-index: 10; /* أعلى من الخط */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.5);
+}
+
+/* النص فوق الغلاف */
+.faculty-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    z-index: 2;
+}
+
+.faculty-text h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.faculty-text p {
+    font-size: 1.2rem;
+}
+
+/* الخط المتموج أسفل الهيدر 
+.wave-divider {
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    position: relative;
+    z-index: 1; /* تحت الشعار 
+}*/
+
+.wave-divider svg {
+    display: block;
+    width: 100%;
+    height: 100px;
+}
+</style>
+
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">منشورات كلية {{ faculty_name }}</h3>
+
+    <div class="posts-container">
+
+        {% if posts.items %}
+            {% for post in posts.items %}
+            <div class="card post-card mb-3" id="post-{{ post.id }}">
+
+ <!-- ===== هيدر المنشور (مثل الصفحة الرئيسية) ===== -->
+<div class="card-header d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center">
+        <img src="{{ url_for('static', filename='uploads/images/' ~ post.author.profile_image)
+                     if post.author.profile_image and post.author.profile_image != 'default_profile.png'
+                     else url_for('static', filename='images/default_profile.png') }}"
+             class="rounded-circle profile-img" 
+             alt="صورة البروفايل"
+             style="margin-left: 10px;">  <!-- ← المسافة هنا -->
+
+        <strong>{{ post.author.username }}</strong>
+    </div>
+
+    <span class="post-date">
+        {{ post.created_at.strftime('%Y-%m-%d') }}
+    </span>
+</div>
+
+
+                <!-- ===== محتوى المنشور ===== -->
+                <div class="card-body">
+
+                    {% if post.title %}
+                        <h5 class="card-title">{{ post.title }}</h5>
+                    {% endif %}
+
+                    {% if post.content %}
+                        <p class="card-text">{{ post.content }}</p>
+                    {% endif %}
+
+                    {% if post.image_path %}
+                        <div class="post-image mb-2">
+                            <img src="{{ url_for('static', filename='uploads/images/' ~ post.image_path) }}"
+                                 class="img-fluid rounded"
+                                 alt="صورة المنشور">
+                        </div>
+                    {% endif %}
+
+                    {% if post.video_path %}
+                        <div class="post-video mb-2">
+                            <video class="w-100 rounded" controls>
+                                <source src="{{ url_for('static', filename='uploads/videos/' ~ post.video_path) }}"
+                                        type="video/mp4">
+                                متصفحك لا يدعم عرض الفيديو
+                            </video>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- ===== فوتر التفاعل (مثل الصفحة الرئيسية) ===== -->
+                <div class="card-footer d-flex justify-content-between align-items-center">
+
+                    <!-- تعليق -->
+                    <button class="btn btn-outline-secondary btn-sm comment-btn"
+                            data-post-id="{{ post.id }}">
+                        <i class="bi bi-chat"></i>
+                        <span class="d-none d-md-inline">تعليق</span>
+                    </button>
+
+                    <!-- إعجاب + مشاركة -->
+                    <div class="d-flex align-items-center gap-2">
+
+                        <button class="btn btn-outline-primary btn-sm like-btn"
+                                data-post-id="{{ post.id }}">
+                            <i class="bi bi-hand-thumbs-up like-icon"></i>
+                        </button>
+
+                        <span class="likes-count fw-bold">
+                            {{ post.likes.count() }}
+                        </span>
+
+                        <div class="share-wrapper position-relative">
+                            <button class="btn btn-outline-success btn-sm share-btn"
+                                    data-post-id="{{ post.id }}">
+                                <i class="bi bi-share"></i>
+                            </button>
+
+                            <div class="share-options d-none">
+                                <button class="share-link"><i class="bi bi-link-45deg"></i></button>
+                                <button class="share-facebook"><i class="bi bi-facebook"></i></button>
+                                <button class="share-twitter"><i class="bi bi-twitter"></i></button>
+                                <button class="share-whatsapp"><i class="bi bi-whatsapp"></i></button>
+                                <button class="share-telegram"><i class="bi bi-telegram"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+        {% else %}
+            <div class="card text-center py-5">
+                <i class="bi bi-inbox display-4 text-muted mb-3"></i>
+                <h5 class="text-muted">لا توجد منشورات لهذه الكلية حالياً</h5>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <!-- ===== Pagination ===== -->
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+
+            {% if posts.has_prev %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="{{ url_for('posts.faculty_posts', faculty_name=faculty_name, page=posts.prev_num) }}">
+                        السابق
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link">
+                    صفحة {{ posts.page }} من {{ posts.pages }}
+                </span>
+            </li>
+
+            {% if posts.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="{{ url_for('posts.faculty_posts', faculty_name=faculty_name, page=posts.next_num) }}">
+                        التالي
+                    </a>
+                </li>
+            {% endif %}
+
+        </ul>
+    </nav>
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+.post-video video {
+    width: 100%;
+    height: auto;
+    min-height: 250px; /* مهم جداً */
+    object-fit: contain;
+    background: #000; /* يمنع التشوه */
+}
+
+.faculty-cover {
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+}
+
+.faculty-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    margin-top: -60px;
+    background: #fff;
+}
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/media.js') }}"></script>
+<script src="{{ url_for('static', filename='js/interaction.js') }}"></script>
+{% endblock %}
+

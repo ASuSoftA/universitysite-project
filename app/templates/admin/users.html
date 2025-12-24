@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة المستخدمين - لوحة التحكم{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>إدارة المستخدمين</h2>
+    <div class="d-flex gap-2">
+    <a href="{{ url_for('admin_control.new_user') }}" class="btn btn-primary">
+        <i class="bi bi-person-plus"></i> إضافة مستخدم جديد
+    </a>
+    <a href="{{ url_for('admin_control.dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> العودة  
+        </a>
+   </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>اسم المستخدم</th>
+                        <th>الصورة</th>
+                        <th>صلاحية المدير</th>
+                        <th>تاريخ التسجيل</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            <img src="{{ url_for('static', filename='uploads/images/' + user.profile_image) if user.profile_image != 'default_profile.png' else url_for('static', filename='images/default_profile.png') }}"
+                                class="rounded-circle" width="40" height="40" alt="صورة البروفايل">
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if user.is_admin else 'secondary' }}">
+                                {{ 'مدير' if user.is_admin else 'مستخدم' }}
+                            </span>
+                        </td>
+                        <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if user.is_active else 'danger' }}">
+                                {{ 'نشط' if user.is_active else 'غير نشط' }}
+                            </span>
+                        </td>
+                        <!--  <td>
+                            #{% if user.id != current_user.id %}
+                            #<a href="{{ url_for('admin_control.delete_user', user_id=user.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('هل أنت متأكد من حذف هذا المستخدم؟')">
+                             #   <i class="bi bi-trash"></i> حذف
+                            #</a>
+                            #{% else %}
+                            # <span class="text-muted">الحساب الحالي</span>
+                            #{% endif %}
+                        #</td> -->
+                        <!-- داخل جدول المستخدمين -->
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ url_for('admin_control.edit_user', user_id=user.id) }}"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i> تعديل
+                                </a>
+
+                                {% if user.id != current_user.id %}
+                                <a href="{{ url_for('admin_control.toggle_user_active', user_id=user.id) }}"
+                                    class="btn btn-sm btn-{{ 'warning' if user.is_active else 'success' }}"
+                                    onclick="return confirm('هل أنت متأكد من {{ 'تعطيل' if user.is_active else 'تفعيل' }} هذا المستخدم؟')">
+                                    <i class="bi bi-{{ 'person-x' if user.is_active else 'person-check' }}"></i>
+                                </a>
+
+                                <a href="{{ url_for('admin_control.delete_user', user_id=user.id) }}"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('هل أنت متأكد من حذف هذا المستخدم؟')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                {% else %}
+                                <span class="btn btn-sm btn-outline-secondary disabled">الحساب الحالي</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

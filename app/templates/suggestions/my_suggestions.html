@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}اقتراحاتي وشكاواي{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>اقتراحاتي وشكاواي</h2>
+        <a href="{{ url_for('suggestions.new_suggestion') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> جديد
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% if suggestions.items %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>النوع</th>
+                            <th>العنوان</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for suggestion in suggestions.items %}
+                        <tr>
+                            <td>
+                                <span class="badge bg-{{ 'success' if suggestion.type == 'suggestion' else 'warning' }}">
+                                    {{ 'اقتراح' if suggestion.type == 'suggestion' else 'شكوى' }}
+                                </span>
+                            </td>
+                            <td>{{ suggestion.title }}</td>
+                            <td>{{ suggestion.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if suggestion.is_read else 'secondary' }}">
+                                    {{ 'تم القراءة' if suggestion.is_read else 'غير مقروء' }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- التصفح -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if suggestions.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('suggestions.my_suggestions', page=suggestions.prev_num) }}">السابق</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in suggestions.iter_pages() %}
+                    <li class="page-item {% if page_num == suggestions.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('suggestions.my_suggestions', page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                    {% endfor %}
+                    
+                    {% if suggestions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('suggestions.my_suggestions', page=suggestions.next_num) }}">التالي</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                <p class="text-muted">لا توجد اقتراحات أو شكاوى</p>
+                <a href="{{ url_for('suggestions.new_suggestion') }}" class="btn btn-primary">أرسل أول رسالة</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

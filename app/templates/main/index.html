@@ -1,0 +1,515 @@
+{% extends "base.html" %}
+
+{% block title %}الرئيسية - منصة الجامعة{% endblock %}
+
+{% block content %}
+
+  <!-- ===== محتوى الصفحة ===== -->
+  <div id="main-content" style="opacity:0;">
+    <!-- كل محتوى index.html هنا -->
+  </div>
+
+  <script>
+    // بعد انتهاء Splash، أخفيه وأظهر المحتوى
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      const main = document.getElementById('main-content');
+
+      splash.style.transition = "opacity 0.8s";
+      splash.style.opacity = 0;
+
+      setTimeout(() => {
+        splash.style.display = "none";
+        main.style.transition = "opacity 0.8s";
+        main.style.opacity = 1;
+      }, 800);
+    }, 4500); // مدة Splash
+  </script>
+
+<!-- ===== سلايدر الجامعة ===== 
+<div id="universityCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="hover">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#universityCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#universityCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#universityCarousel" data-bs-slide-to="2"></button>
+        <button type="button" data-bs-target="#universityCarousel" data-bs-slide-to="3"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{{ url_for('static', filename='images/slider1.jpg') }}" class="d-block w-100 carousel-img" alt="صورة الجامعة 1">
+            <div class="carousel-caption">
+                <div class="caption-bg p-4 rounded">
+                    <h2>🎓 مرحبًا بكم في منصة الجامعة</h2>
+                    <p>نحو بيئة تعليمية رقمية تجمع الطلبة والأساتذة والإبداع معًا.</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/slider2.jpg') }}" class="d-block w-100 carousel-img" alt="صورة الجامعة 2">
+            <div class="carousel-caption">
+                <div class="caption-bg p-4 rounded">
+                    <h2>💡 تواصل وابتكر</h2>
+                    <p>تابع أحدث الإعلانات والمنشورات الأكاديمية بسهولة ويسر.</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/slider4.jpg') }}" class="d-block w-100 carousel-img" alt="صورة الجامعة 3">
+            <div class="carousel-caption">
+                <div class="caption-bg p-4 rounded">
+                    <h2>📚 المكتبة الرقمية</h2>
+                    <p>استفد من المصادر الأكاديمية والمراجع الحديثة أينما كنت.</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/slider3.jpg') }}" class="d-block w-100 carousel-img" alt="صورة الجامعة 4">
+            <div class="carousel-caption">
+                <div class="caption-bg p-4 rounded">
+                    <h2>مرحبًا بكم في منصة الجامعة 🎓</h2>
+                    <p>حيث تلتقي المعرفة بالإبداع.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#universityCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">السابق</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#universityCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">التالي</span>
+    </button>
+</div>
+===== نهاية السلايدر ===== -->
+<!--<img src="{{ url_for('static', filename='uploads/images/20251214_003513_6caa1ea3be864191899c4a413d5eff2f.jpg') }}"
+     style="width:200px; border:2px solid red;">
+
+
+<div id="threejs-container" style="width:100%; height:300px;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+renderer.setSize(window.innerWidth, 300);
+document.getElementById('threejs-container').appendChild(renderer.domElement);
+
+// تحميل صورة كخامة
+const loader = new THREE.TextureLoader();
+const texture = loader.load('{{ url_for("static", filename="uploads/images/20251214_003513_6caa1ea3be864191899c4a413d5eff2f.jpg") }}');
+
+// إنشاء Plane (مستطيل)
+const geometry = new THREE.PlaneGeometry(2, 2); // عرض وارتفاع Plane
+const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+const plane = new THREE.Mesh(geometry, material);
+scene.add(plane);
+
+camera.position.z = 5;
+
+function animate() {
+    requestAnimationFrame(animate);
+    plane.rotation.y += 0.01; // دوران الصورة حول المحور الرأسي
+    renderer.render(scene, camera);
+}
+animate();
+</script> -->
+
+<div id="threejs-container" style="width:100%; height:300px; margin-top:0; padding-top:0;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const container = document.getElementById('threejs-container');
+const width = container.clientWidth;
+const height = container.clientHeight;
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+camera.position.z = 3.5;
+
+const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true
+});
+renderer.setSize(width, height);
+renderer.setClearColor(0x000000, 0); // شفافية
+container.appendChild(renderer.domElement);
+
+// تحميل الصورة
+const loader = new THREE.TextureLoader();
+//const texture = loader.load(
+  // '{{ url_for("static", filename="uploads/images/20251214_212346_ce9bd94371524df893cb706c5a5e10fa.jpg") }}'
+//);
+
+const materials = [
+    new THREE.MeshBasicMaterial({
+        map: loader.load('{{ url_for("static", filename="uploads/images/20251214_212346_ce9bd94371524df893cb706c5a5e10fa.jpg") }}')
+    }),
+    new THREE.MeshBasicMaterial({
+        map: loader.load('{{ url_for("static", filename="uploads/images/IMG-20251202-WA0051.jpg") }}')
+    }),
+    new THREE.MeshBasicMaterial({
+        map: loader.load('{{ url_for("static", filename="uploads/images/IMG-20251202-WA0053.jpg") }}')
+    }),
+    new THREE.MeshBasicMaterial({
+        map: loader.load('{{ url_for("static", filename="uploads/images/23d6a95f48ddb2e341382b42f2f2ba90.jpg") }}')
+    }),
+    new THREE.MeshBasicMaterial({
+        map: loader.load('{{ url_for("static", filename="uploads/images/07b6b7b0a7f7cc4c9d2b7137c6658dc5.jpg") }}')
+    }),
+    new THREE.MeshBasicMaterial({
+        map: loader.load('{{ url_for("static", filename="uploads/images/909452205a43160f9d3576966802333d.jpg") }}')
+    })
+];
+
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(5,5,5);
+scene.add(light);
+
+const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambient);
+
+
+ // مكعب مع الصورة
+const geometry = new THREE.BoxGeometry();
+//const material = new THREE.MeshBasicMaterial({ map: texture });
+//const cube = new THREE.Mesh(geometry, material);
+const cube = new THREE.Mesh(geometry, materials);
+
+// تكبير المكعب
+cube.scale.set(1.8, 1.8, 1.8);
+
+scene.add(cube);
+
+document.addEventListener('mousemove', (event) => {
+    cube.rotation.y = (event.clientX / window.innerWidth) * Math.PI * 2;
+    cube.rotation.x = (event.clientY / window.innerHeight) * Math.PI * 2;
+});
+
+
+function animate() {
+    requestAnimationFrame(animate);
+    cube.rotation.x -= 0.003;
+    cube.rotation.y -= 0.004;
+
+    //cube.position.x += 0.01; // يتحرك نحو اليمين
+    //cube.position.y += 0.01; // يتحرك للأعلى
+
+    //cube.position.x = Math.sin(Date.now() * 0.001) * 2; // يتحرك ذهاباً وإياباً على X
+    //cube.position.y = Math.cos(Date.now() * 0.001) * 1.5; // يتحرك ذهاباً وإياباً على Y
+
+    //cube.rotation.x = time / 2000; // دوران مستمر مع الزمن
+    //cube.rotation.y = time / 3000;
+
+    //const radius = 2;
+    //const speed = 0.001;
+    //cube.position.x = Math.cos(Date.now() * speed) * radius;
+    //cube.position.z = Math.sin(Date.now() * speed) * radius;
+
+    //cube.position.y = Math.abs(Math.sin(Date.now() * 0.0005)) * 2;
+
+    //cube.position.x = Math.sin(Date.now() * 0.0002) * 3;
+    //cube.position.y = Math.cos(Date.now() * 0.0003) * 2;
+    //cube.position.z = Math.sin(Date.now() * 0.0004) * 1.5;
+
+    renderer.render(scene, camera);
+}
+animate();
+
+// دعم تغيير حجم الشاشة
+window.addEventListener('resize', () => {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+
+material = new THREE.MeshStandardMaterial({
+    map: texture,
+    metalness: 0.5,
+    roughness: 0.1,
+    transparent: true,
+    opacity: 0.9
+});
+
+</script>
+<!-- ===== سلايدر النصوص المتحركة ===== -->
+<div id="animatedTextCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="hover">
+    <div class="carousel-inner text-center">
+
+        <div class="carousel-item active">
+            <h2 class="animated-text">🎓 مرحبًا بكم في منصة الجامعة</h2>
+            <p class="animated-text">نحو بيئة تعليمية رقمية تجمع الطلبة والأساتذة والإبداع معًا.</p>
+        </div>
+
+        <div class="carousel-item">
+            <h2 class="animated-text">💡 تواصل وابتكر</h2>
+            <p class="animated-text">تابع أحدث الإعلانات والمنشورات الأكاديمية بسهولة ويسر.</p>
+        </div>
+
+        <div class="carousel-item">
+            <h2 class="animated-text">📚 المكتبة الرقمية</h2>
+            <p class="animated-text">استفد من المصادر الأكاديمية والمراجع الحديثة أينما كنت.</p>
+        </div>
+<div class="carousel-item">
+    <h2 class="animated-text">🤖 المساعد الذكي</h2>
+    <p class="animated-text">استكشف رؤية ورسالة الجامعة، تعرف على الأقسام والتخصصات، واكتشف خطوات التقديم ومواعيد بداية العام الدراسي بسهولة ويسر.</p>
+</div>
+
+    </div>
+
+    <!-- أزرار التحكم 
+    <button class="carousel-control-prev" type="button" data-bs-target="#animatedTextCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">السابق</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#animatedTextCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">التالي</span>
+    </button>-->
+</div>
+<!-- ===== CSS ===== -->
+<style>
+.animated-text {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideIn 1s forwards;
+}
+
+.carousel-item p.animated-text {
+    font-size: 1rem;
+    margin: 0;
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* تأثير خروج النص عند تبديل العنصر */
+.carousel-item-next .animated-text,
+.carousel-item-prev .animated-text {
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+#animatedTextCarousel {
+    margin-top: 10px;   /* بدلًا من my-5 */
+    margin-bottom: 10px;
+}
+
+</style>
+<!-- ===== JavaScript لتفعيل الحركة عند تغيير السلايدر ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const carousel = document.getElementById('animatedTextCarousel');
+
+    function animateTexts(item) {
+        const texts = item.querySelectorAll('.animated-text');
+        texts.forEach(text => {
+            text.style.opacity = '0';
+            text.style.transform = 'translateX(100%)';
+            // إعادة تفعيل الـ animation
+            text.offsetWidth; // force reflow
+            text.style.animation = 'slideIn 1s forwards';
+        });
+    }
+
+    // بدء أول عنصر
+    animateTexts(carousel.querySelector('.carousel-item.active'));
+
+    // عند الانتقال لعنصر جديد
+    carousel.addEventListener('slid.bs.carousel', function (e) {
+        animateTexts(e.relatedTarget);
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.faculty-link').forEach(el => {
+        el.addEventListener('click', function () {
+            const faculty = this.dataset.faculty;
+            window.location.href = `/faculty/${encodeURIComponent(faculty)}`;
+        });
+    });
+});
+</script>
+
+
+
+<div class="row mt-4">
+    <!-- المنشورات الرئيسية -->
+    <div class="col-lg-6 col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">الإعلانات والمنشورات</h2>
+            <span class="badge bg-primary">{{ posts|length }} منشور</span>
+        </div>
+
+        <div class="posts-container">
+    {% if posts %}
+        {% for post in posts %}
+        <div class="card post-card" id="post-{{ post.id }}">
+            <!-- هيدر المنشور -->
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='uploads/images/' + post.author.profile_image) if post.author.profile_image and post.author.profile_image != 'default_profile.png' else url_for('static', filename='images/default_profile.png') }}"
+                         class="rounded-circle profile-img " alt="صورة البروفايل">
+
+                    <!-- الرابط إلى صفحة الكلية -->
+                    <a href="{{ url_for('main.faculty_posts', faculty_name=post.faculty.name) }}" 
+   class="faculty-link" style="cursor:pointer; font-weight:bold; text-decoration:none; color:inherit; margin-right:0.8rem;">
+    {{ post.author.username }}
+</a>
+
+                </div>
+
+                <span class="post-date">{{ post.created_at.strftime('%Y-%m-%d') }}</span>
+            </div>
+                    <!-- محتوى المنشور -->
+                    <div class="card-body">
+                        {% if post.title %}<h5 class="card-title">{{ post.title }}</h5>{% endif %}
+                        {% if post.content %}<p class="card-text">{{ post.content }}</p>{% endif %}
+
+                        {% if post.image_path %}
+                        <div class="post-image mb-2">
+                            <img src="{{ url_for('static', filename='uploads/images/' ~ post.image_path) }}" class="img-fluid" alt="صورة المنشور">
+                        </div>
+                        {% endif %}
+
+                        {% if post.video_path %}
+                        <div class="post-video mb-2">
+                            <video class="w-100" controls>
+                                <source src="{{ url_for('static', filename='uploads/videos/' ~ post.video_path) }}" type="video/mp4">
+                                متصفحك لا يدعم عرض الفيديو
+                            </video>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- الفوتر -->
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <!-- اليسار: زر التعليق -->
+                        <div>
+                            <button class="btn btn-outline-secondary btn-sm comment-btn" data-post-id="{{ post.id }}">
+                                <i class="bi bi-chat"></i> <span class="d-none d-md-inline">تعليق</span>
+                            </button>
+                        </div>
+
+                        <!-- اليمين: إعجاب + عداد + مشاركة -->
+                        <div class="d-flex align-items-center gap-2">
+                            <button class="btn btn-outline-primary btn-sm like-btn" data-post-id="{{ post.id }}">
+                                <i class="bi bi-hand-thumbs-up like-icon"></i>
+                            </button>
+                            <span class="likes-count fw-bold">{{ post.likes.count() }}</span>
+
+                            <div class="share-wrapper position-relative">
+    <button class="btn btn-outline-success btn-sm share-btn" data-post-id="{{ post.id }}">
+        <i class="bi bi-share"></i> <span class="d-none d-md-inline"></span>
+    </button>
+    <div class="share-options d-none">
+    <button class="share-link" title="نسخ الرابط"><i class="bi bi-link-45deg"></i></button>
+    <button class="share-facebook" title="فيسبوك"><i class="bi bi-facebook"></i></button>
+    <button class="share-twitter" title="تويتر"><i class="bi bi-twitter"></i></button>
+    <button class="share-whatsapp" title="واتساب"><i class="bi bi-whatsapp"></i></button>
+    <button class="share-telegram" title="تيليجرام"><i class="bi bi-telegram"></i></button>
+    <button class="share-instagram" title="إنستجرام"><i class="bi bi-instagram"></i></button>
+
+    </div>
+</div>
+</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="card text-center py-5">
+                    <i class="bi bi-inbox display-4 text-muted mb-3"></i>
+                    <h4 class="text-muted">لا توجد منشورات حالياً</h4>
+                    <p class="text-muted">كن أول من ينشر محتوى على المنصة</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- الشريط الجانبي -->
+    <div class="col-lg-3 col-md-4">
+        <!-- إحصائيات -->
+        <div class="sidebar-stats mb-4">
+            <h5>إحصائيات المنصة</h5>
+            <div class="stat-item"><span>عدد المنشورات</span><span class="stat-value">{{ stats.total_posts }}</span></div>
+            <div class="stat-item"><span>منشورات منشورة</span><span class="stat-value">{{ stats.published_posts }}</span></div>
+            <div class="stat-item"><span>عدد المستخدمين</span><span class="stat-value">{{ stats.total_users }}</span></div>
+            <div class="stat-item"><span>إجمالي الإعجابات</span><span class="stat-value">{{ stats.total_likes }}</span></div>
+        </div>
+
+        <!-- أحدث المنشورات -->
+        <div class="card sidebar-card mb-4">
+            <div class="card-header"><h6>أحدث المنشورات</h6></div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for post in posts[:5] %}
+                    <a href="#post-{{ post.id }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex align-items-center">
+                            {% if post.post_type == 'image' %}
+                            <i class="bi bi-image text-primary me-2"></i>
+                            {% elif post.post_type == 'video' %}
+                            <i class="bi bi-play-circle text-success me-2"></i>
+                            {% else %}
+                            <i class="bi bi-text-paragraph text-info me-2"></i>
+                            {% endif %}
+                            <span>{{ (post.title or '')[:25] }}{% if post.title and post.title|length > 25 %}...{% endif %}</span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- أنشطة حديثة -->
+        <div class="card sidebar-card">
+            <div class="card-header"><h6>أنشطة حديثة</h6></div>
+            <div class="card-body">
+                <div class="activity-list">
+                    <div class="activity-item"><i class="bi bi-hand-thumbs-up text-primary"></i><span>5 إعجابات جديدة</span></div>
+                    <div class="activity-item"><i class="bi bi-share text-success"></i><span>3 مشاركات جديدة</span></div>
+                    <div class="activity-item"><i class="bi bi-person-plus text-info"></i><span>مستخدم جديد انضم</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+.post-video video {
+    width: 100%;
+    height: auto;
+    min-height: 250px; /* مهم جداً */
+    object-fit: contain;
+    background: #000; /* يمنع التشوه */
+}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/media.js') }}"></script>
+<script src="{{ url_for('static', filename='js/interaction.js') }}"></script>
+{% endblock %}

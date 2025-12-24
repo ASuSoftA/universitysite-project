@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}عرض {{ 'اقتراح' if suggestion.type == 'suggestion' else 'شكوى' }} - لوحة التحكم{% endblock %}
+
+{% block content %}
+<div class="container ">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>عرض {{ 'اقتراح' if suggestion.type == 'suggestion' else 'شكوى' }}</h2>
+                <a href="{{ url_for('suggestions.admin_suggestions') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> العودة للقائمة
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            {% if suggestion.title %}
+                                {{ suggestion.title }}
+                            {% else %}
+                                {{ 'اقتراح' if suggestion.type == 'suggestion' else 'شكوى' }} بدون عنوان
+                            {% endif %}
+                        </h4>
+                        <span class="badge bg-{{ 'success' if suggestion.type == 'suggestion' else 'warning' }}">
+                            {{ 'اقتراح' if suggestion.type == 'suggestion' else 'شكوى' }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <!-- معلومات المرسل -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6>معلومات المرسل:</h6>
+                                    <ul class="list-unstyled">
+                                        <li><strong>اسم المستخدم:</strong> {{ suggestion.user.username }}</li>
+                                        <li><strong>رقم العضوية:</strong> {{ suggestion.user.id }}</li>
+                                        <li><strong>تاريخ الإرسال:</strong> {{ suggestion.created_at.strftime('%Y-%m-%d %H:%M') }}</li>
+                                        <li><strong>الحالة:</strong> 
+                                            <span class="badge bg-{{ 'success' if suggestion.is_read else 'secondary' }}">
+                                                {{ 'مقروء' if suggestion.is_read else 'غير مقروء' }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6>الإجراءات:</h6>
+                                    <div class="d-grid gap-2">
+                                        <form action="{{ url_for('suggestions.mark_as_read', suggestion_id=suggestion.id) }}" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-success w-100 mb-2">
+                                                <i class="fas fa-check"></i> وضع علامة كمقروء
+                                            </button>
+                                        </form>
+                                        
+                                        <a href="{{ url_for('suggestions.delete_suggestion', suggestion_id=suggestion.id) }}" 
+                                           class="btn btn-sm btn-outline-danger w-100"
+                                           onclick="return confirm('هل أنت متأكد من حذف هذا {{ 'الاقتراح' if suggestion.type == 'suggestion' else 'الشكوى' }}؟')">
+                                            <i class="fas fa-trash"></i> حذف
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- محتوى الاقتراح/الشكوى -->
+                    <div class="mb-4">
+                        <h5>المحتوى:</h5>
+                        <div class="card">
+                            <div class="card-body">
+                                {% if suggestion.content %}
+                                    <p class="mb-0" style="white-space: pre-wrap; line-height: 1.6;">{{ suggestion.content }}</p>
+                                {% else %}
+                                    <p class="text-muted">لا يوجد محتوى</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- معلومات إضافية -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6>معلومات تقنية:</h6>
+                                    <ul class="list-unstyled">
+                                        <li><strong>رقم الـ ID:</strong> {{ suggestion.id }}</li>
+                                        <li><strong>آخر تحديث:</strong> 
+                                            {% if suggestion.updated_at %}
+                                                {{ suggestion.updated_at.strftime('%Y-%m-%d %H:%M') }}
+                                            {% else %}
+                                                لم يتم التحديث
+                                            {% endif %}
+                                        </li>
+                                        <li><strong>رقم المستخدم:</strong> {{ suggestion.user_id }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('suggestions.admin_suggestions') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> العودة للقائمة
+                        </a>
+                        
+                        <div class="btn-group">
+                            <form action="{{ url_for('suggestions.mark_as_read', suggestion_id=suggestion.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> تم القراءة
+                                </button>
+                            </form>
+                            
+                            <a href="{{ url_for('suggestions.delete_suggestion', suggestion_id=suggestion.id) }}" 
+                               class="btn btn-danger"
+                               onclick="return confirm('هل أنت متأكد من حذف هذا {{ 'الاقتراح' if suggestion.type == 'suggestion' else 'الشكوى' }}؟')">
+                                <i class="fas fa-trash"></i> حذف
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

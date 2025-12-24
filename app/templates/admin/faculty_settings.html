@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة التحكم - منصة الجامعة{% endblock %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label>صورة غلاف الكلية</label><br>
+        {% if faculty.cover_image %}
+            <img src="{{ url_for('static', filename='uploads/faculties/' ~ faculty.cover_image) }}" 
+                 style="max-width:200px; margin-bottom:10px;">
+        {% endif %}
+        <input type="file" name="cover_image" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>شعار الكلية</label><br>
+        {% if faculty.logo_image %}
+            <img src="{{ url_for('static', filename='uploads/faculties/' ~ faculty.logo_image) }}" 
+                 style="max-width:100px; margin-bottom:10px;">
+        {% endif %}
+        <input type="file" name="logo_image" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>وصف الكلية (اختياري)</label>
+        <textarea name="description" class="form-control" rows="4">{{ faculty.description or '' }}</textarea>
+    </div>
+
+    <button class="btn btn-primary">حفظ</button>
+</form>
+{% endblock %}

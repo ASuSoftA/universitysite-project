@@ -1,0 +1,6 @@
+<img src="{{ url_for('static', filename='uploads/faculty/' ~ faculty.cover_image) }}">
+
+<img class="faculty-logo"
+     src="{{ url_for('static', filename='uploads/faculty/' ~ faculty.logo_image) }}">
+
+<p>{{ faculty.description }}</p>

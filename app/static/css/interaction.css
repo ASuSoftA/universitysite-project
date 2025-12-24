@@ -1,0 +1,39 @@
+/* أنماط التفاعل */
+.like-btn, .share-btn {
+    transition: all 0.3s ease;
+    border-radius: 20px;
+    padding: 6px 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.like-btn:hover, .share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.like-btn:active, .share-btn:active {
+    transform: translateY(0);
+}
+
+/* حالة الإعجاب النشط */
+.like-btn.active-like {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border-color: #e74c3c;
+}
+
+.like-btn.active-like i {
+    color: white !important;
+}
+
+/* تأثيرات التحميل */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading {
+    animation: spin 1s linear infinite;
+}
+

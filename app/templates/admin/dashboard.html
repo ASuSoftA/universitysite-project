@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة التحكم - منصة الجامعة{% endblock %}
+
+{% block content %}
+
+<style>
+   .quick-btn {
+    
+    height: 90px; /* توحيد الارتفاع */
+    padding-bottom: 15px;
+    font-size: 1.05rem;
+    border-radius: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+/* أيقونة داخل الزر */
+.quick-btn i {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 2rem !important;
+    transition: transform 0.35s ease-in-out;
+}
+
+/* تكبير أيقونة عند المرور */
+.quick-btn:hover i {
+    transform: scale(1.25);
+}
+
+/* اهتزاز خفيف عند النقر */
+.quick-btn:active {
+    transform: scale(0.97);
+}
+
+/* تأثير توهج Glow */
+.quick-btn:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 0 12px rgba(255, 255, 255, 0.25),
+        0 0 22px currentColor,
+        0 0 35px currentColor;
+}
+
+/* Ripple Effect */
+.quick-btn::after {
+    content: "";
+    position: absolute;
+    background: rgba(255,255,255,0.4);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.6s;
+    pointer-events: none;
+}
+
+.quick-btn:active::after {
+    transform: scale(25);
+    opacity: 1;
+    transition: 0s;
+}
+
+</style>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold">
+            <i class="bi bi-speedometer2"></i> لوحة تحكم المدير
+        </h2>
+        <hr>
+    </div>
+</div>
+
+<!-- بطاقات الإحصائيات -->
+<div class="row">
+
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-primary dashboard-card">
+            <div class="card-body text-center">
+                <i class="bi bi-file-text display-4 mb-2"></i>
+                <h5 class="card-title">إجمالي المنشورات</h5>
+                <h2>{{ stats.total_posts }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-success dashboard-card">
+            <div class="card-body text-center">
+                <i class="bi bi-check-circle display-4 mb-2"></i>
+                <h5 class="card-title">منشورات منشورة</h5>
+                <h2>{{ stats.published_posts }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-info dashboard-card">
+            <div class="card-body text-center">
+                <i class="bi bi-people display-4 mb-2"></i>
+                <h5 class="card-title">المستخدمين</h5>
+                <h2>{{ stats.total_users }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-warning dashboard-card">
+            <div class="card-body text-center">
+                <i class="bi bi-heart display-4 mb-2"></i>
+                <h5 class="card-title">الإعجابات</h5>
+                <h2>{{ stats.total_likes }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- الإجراءات السريعة -->
+<div class="card dashboard-card mb-4">
+    <div class="card-header bg-light">
+        <h5>الإجراءات السريعة</h5>
+    </div>
+    <div class="card-body">
+
+        <div class="row g-3">
+<div class="row g-3">
+
+    <!-- إضافة منشور جديد -->
+    <div class="col-md-4">
+        <a href="{{ url_for('admin_control.new_post') }}" 
+           class="btn quick-btn w-100 btn-primary text-white" 
+           style="animation-delay: 0.05s;">
+            <i class="bi bi-plus-circle fs-4"></i>
+            إضافة منشور جديد
+        </a>
+    </div>
+
+    <!-- إضافة مستخدم جديد -->
+    <div class="col-md-4">
+        <a href="{{ url_for('admin_control.new_user') }}"
+           class="btn quick-btn w-100 btn-success text-white"
+           style="animation-delay: 0.10s;">
+            <i class="bi bi-person-plus fs-4"></i>
+            إضافة مستخدم جديد
+        </a>
+    </div>
+
+    <!-- إدارة المنشورات -->
+    <div class="col-md-4">
+        <a href="{{ url_for('admin_control.manage_posts') }}"
+           class="btn quick-btn w-100 btn-info text-white"
+           style="animation-delay: 0.15s;">
+            <i class="bi bi-list-check fs-4"></i>
+            إدارة المنشورات
+        </a>
+    </div>
+
+    <!-- إدارة المستخدمين -->
+    <div class="col-md-4">
+        <a href="{{ url_for('admin_control.manage_users') }}"
+           class="btn quick-btn w-100 btn-warning text-dark"
+           style="animation-delay: 0.20s;">
+            <i class="bi bi-people fs-4"></i>
+            إدارة المستخدمين
+        </a>
+    </div>
+
+    <!-- إدارة المكتبة -->
+    <div class="col-md-4">
+        <a href="{{ url_for('library.admin_library') }}"
+           class="btn quick-btn w-100 btn-warning text-white"
+           style="background-color:#4cd964; animation-delay: 0.25s;">
+            <i class="fas fa-folder-open fs-4"></i>
+            إدارة المكتبة
+        </a>
+    </div>
+
+    <!-- رفع ملف -->
+    <div class="col-md-4">
+        <a href="{{ url_for('library.upload_file', from_admin=1) }}"
+           class="btn quick-btn w-100 btn-secondary text-white"
+           style="animation-delay: 0.30s;">
+            <i class="bi bi-upload fs-4"></i>
+            رفع ملف إلى المكتبة
+        </a>
+    </div>
+<!-- إضافة زر تعديل إعدادات الكلية -->
+<div class="col-md-4">
+    <a href="{{ url_for('admin_control.faculty_settings', faculty_id=1) }}" 
+       class="btn quick-btn w-100 btn-dark text-white">
+        <i class="bi bi-building fs-4"></i>
+        إعدادات صفحة الكلية
+    </a>
+</div>
+
+
+    <!-- تعديل الملف الشخصي -->
+    <div class="col-md-4">
+        <a href="{{ url_for('user_control.edit_profile', from_admin=1) }}"
+           class="btn quick-btn w-100 text-white"
+           style="background-color:#ff9500; animation-delay: 0.35s;">
+            <i class="bi bi-person-gear fs-4"></i>
+            تعديل الملف الشخصي
+        </a>
+    </div>
+
+    <!-- تغيير كلمة المرور -->
+    <div class="col-md-4">
+        <a href="{{ url_for('user_control.change_password', from_admin=1) }}"
+           class="btn quick-btn w-100 text-white"
+           style="background-color:#0099ff; animation-delay: 0.40s;">
+            <i class="bi bi-key fs-4"></i>
+            تغيير كلمة المرور
+        </a>
+    </div>
+<div class="col-md-4">
+        <a href="{{ url_for('suggestions.admin_suggestions') }}" 
+           class="btn quick-btn w-100 btn-success text-white"
+           style="animation-delay: 0.05s;">
+            <i class="class= fas fa-inbox  fs-4"></i>
+         الرسائل الواردة 
+        </a>
+    </div>
+</div>
+                 
+        </div>
+    </div>
+</div>
+<!-- إدارة المعرفة -->
+<div class="col-md-4 mb-4">
+    <div class="card dashboard-card">
+        <div class="card-body text-center">
+            <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+            <h5>إدارة المعرفة</h5>
+            <p>إدارة محتوى المساعد الذكي</p>
+            <a href="{{ url_for('admin_control.manage_knowledge') }}" class="btn btn-primary">
+                الذهاب للإدارة
+            </a>
+        </div>
+    </div>
+</div>
+<!-- الرسومات البيانية -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-header bg-light">
+                <h5>نسبة أنواع المنشورات</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="postTypeChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-header bg-light">
+                <h5>إحصائيات النشاط</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="activityChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // الرسم البياني الأول
+    new Chart(document.getElementById('postTypeChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['نص', 'صورة', 'فيديو'],
+            datasets: [{
+                data: [60, 25, 15],
+                backgroundColor: ['#667eea', '#764ba2', '#f093fb']
+            }]
+        }
+    });
+
+    // الرسم البياني الثاني
+    new Chart(document.getElementById('activityChart'), {
+        type: 'line',
+        data: {
+            labels: ['الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'],
+            datasets: [{
+                label: 'الإعجابات',
+                data: [12, 19, 8, 15, 22, 18, 25],
+                borderColor: '#667eea',
+                tension: 0.4
+            }]
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}تسجيل الدخول - لوحة التحكم{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h4 class="text-center">تسجيل دخول المدير</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin_control.login') }}">
+
+                    <!-- اختيار الكلية -->
+                    <div class="mb-3">
+                        <label for="faculty_id" class="form-label">الكلية</label>
+                        <select class="form-select" id="faculty_id" name="faculty_id">
+                            <option value="">— اختر الكلية —</option>
+                            {% for f in faculties %}
+                                <option value="{{ f.id }}">{{ f.name }}</option>
+                            {% endfor %}
+                        </select>
+                
+                    </div>
+
+                    <!-- اسم المستخدم -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label">اسم المستخدم</label>
+                        <input type="text"
+                               class="form-control"
+                               id="username"
+                               name="username"
+                               required>
+                    </div>
+
+                    <!-- كلمة المرور -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">كلمة المرور</label>
+                        <div class="position-relative">
+                            <span id="togglePassword"
+                                  style="cursor:pointer; position:absolute; left:10px; top:50%; transform:translateY(-50%);">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                            <input type="password"
+                                   class="form-control ps-5"
+                                   id="password"
+                                   name="password"
+                                   required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        <i class="bi bi-box-arrow-in-right"></i> تسجيل الدخول
+                    </button>
+                    <!-- زر الإلغاء -->
+<a href="{{ url_for('main.index') }}" class="btn btn-secondary w-100">
+    <i class="bi bi-x-circle"></i> إلغاء
+</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .cancel-btn {
+        background-color: #f8f9fa; /* خلفية فاتحة */
+        color: #495057; /* لون النص */
+        border: 1px solid #ced4da; /* حدود خفيفة */
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+    .cancel-btn:hover {
+        background-color: #e2e6ea; /* لون عند المرور */
+        color: #212529;
+        text-decoration: none;
+    }
+</style>
+
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function () {
+        const type = password.type === 'password' ? 'text' : 'password';
+        password.type = type;
+        this.innerHTML = type === 'password'
+            ? '<i class="bi bi-eye"></i>'
+            : '<i class="bi bi-eye-slash"></i>';
+    });
+</script>
+{% endblock %}

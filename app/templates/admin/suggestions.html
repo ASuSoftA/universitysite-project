@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة الاقتراحات والشكاوى - لوحة التحكم{% endblock %}
+
+{% block content %}
+<div class="container ">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>إدارة الاقتراحات والشكاوى</h2>
+        <div>
+            <a href="{{ url_for('admin_control.dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> العودة للوحة التحكم
+            </a>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- فلترة الاقتراحات -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <select name="type" class="form-select">
+                        <option value="all" {% if current_filter=='all' %}selected{% endif %}>جميع الأنواع</option>
+                        <option value="suggestion" {% if current_filter=='suggestion' %}selected{% endif %}>اقتراحات
+                        </option>
+                        <option value="complaint" {% if current_filter=='complaint' %}selected{% endif %}>شكاوى</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="read" class="form-select">
+                        <option value="all" {% if current_read_filter=='all' %}selected{% endif %}>جميع الحالات</option>
+                        <option value="read" {% if current_read_filter=='read' %}selected{% endif %}>مقروء</option>
+                        <option value="unread" {% if current_read_filter=='unread' %}selected{% endif %}>غير مقروء
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> تصفية
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url_for('suggestions.admin_suggestions') }}" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-sync"></i> إعادة تعيين
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- جدول الاقتراحات -->
+    <div class="card">
+        <div class="card-body">
+            {% if suggestions.items %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>النوع</th>
+                            <th>العنوان</th>
+                            <th>المرسل</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for suggestion in suggestions.items %}
+                        <tr>
+                            <td>
+                                <span
+                                    class="badge bg-{{ 'success' if suggestion.type == 'suggestion' else 'warning' }}">
+                                    {{ 'اقتراح' if suggestion.type == 'suggestion' else 'شكوى' }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if suggestion.title %}
+                                {{ suggestion.title }}
+                                {% else %}
+                                <span class="text-muted">بدون عنوان</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ suggestion.user.username }}</td>
+                            <td>{{ suggestion.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if suggestion.is_read else 'secondary' }}">
+                                    {{ 'مقروء' if suggestion.is_read else 'غير مقروء' }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('suggestions.view_suggestion', suggestion_id=suggestion.id) }}"
+                                        class="btn btn-sm btn-outline-info" title="عرض">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ url_for('suggestions.delete_suggestion', suggestion_id=suggestion.id) }}"
+                                        class="btn btn-sm btn-outline-danger" title="حذف"
+                                        onclick="return confirm('هل أنت متأكد من حذف هذا {{ " الاقتراح" if
+                                        suggestion.type=="suggestion" else "الشكوى" }}؟')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- التصفح -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if suggestions.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="{{ url_for('suggestions.admin_suggestions', page=suggestions.prev_num, type=current_filter, read=current_read_filter) }}">السابق</a>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in suggestions.iter_pages() %}
+                    <li class="page-item {% if page_num == suggestions.page %}active{% endif %}">
+                        <a class="page-link"
+                            href="{{ url_for('suggestions.admin_suggestions', page=page_num, type=current_filter, read=current_read_filter) }}">{{
+                            page_num }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if suggestions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="{{ url_for('suggestions.admin_suggestions', page=suggestions.next_num, type=current_filter, read=current_read_filter) }}">التالي</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                <p class="text-muted">لا توجد اقتراحات أو شكاوى</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}تفاصيل الملف - {{ file.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>{{ file.title }}</h4>
+                </div>
+                <div class="card-body">
+                    {% if file.description %}
+                    <div class="mb-4">
+                        <h5>الوصف:</h5>
+                        <p class="text-muted">{{ file.description }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6>معلومات الملف:</h6>
+                                    <ul class="list-unstyled">
+                                        <li><strong>النوع:</strong>
+                                            <span class="badge bg-{{ 
+                                                'success' if file.file_type == 'book' else 
+                                                'info' if file.file_type == 'handout' else 
+                                                'warning' if file.file_type == 'exam' else 
+                                                'secondary' 
+                                            }}">
+                                                {{ 'كتاب' if file.file_type == 'book' else
+                                                'ملزمة' if file.file_type == 'handout' else
+                                                'امتحان' if file.file_type == 'exam' else
+                                                'ملاحظات' if file.file_type == 'notes' else
+                                                'أخرى' }}
+                                            </span>
+                                        </li>
+                                        {% if file.course %}
+                                        <li><strong>المادة:</strong> {{ file.course }}</li>
+                                        {% endif %}
+                                        {% if file.semester %}
+                                        <li><strong>الفصل:</strong>
+                                            {{ 'الأول' if file.semester == 'first' else
+                                            'الثاني' if file.semester == 'second' else
+                                            file.semester }}
+                                        </li>
+                                        {% endif %}
+                                        <li><strong>حجم الملف:</strong>
+                                            {% if file.file_size %}
+                                            {{ (file.file_size / 1024 / 1024)|round(2) }} MB
+                                            {% else %}
+                                            غير معروف
+                                            {% endif %}
+                                        </li>
+                                        <li><strong>عدد التحميلات:</strong> {{ file.download_count }}</li>
+                                        <li><strong>تاريخ الرفع:</strong> {{ file.created_at.strftime('%Y-%m-%d %H:%M')
+                                            }}</li>
+                                        <li><strong>رافع الملف:</strong> {{ file.uploader.username }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 text-center">
+                            <div class="file-icon mb-3">
+                                {% if file.file_type == 'book' %}
+                                <i class="fas fa-book fa-5x text-primary"></i>
+                                {% elif file.file_type == 'handout' %}
+                                <i class="fas fa-file-alt fa-5x text-info"></i>
+                                {% elif file.file_type == 'exam' %}
+                                <i class="fas fa-file-signature fa-5x text-warning"></i>
+                                {% else %}
+                                <i class="fas fa-file fa-5x text-secondary"></i>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                {% if file.file_size %}
+                                <a href="{{ url_for('library.download_file', file_id=file.id) }}"
+                                    class="btn btn-primary btn-lg">
+                                    <i class="fas fa-download"></i> تحميل الملف
+                                </a>
+                                {% else %}
+                                <button class="btn btn-secondary btn-lg" disabled>
+                                    <i class="fas fa-exclamation-triangle"></i> الملف غير متاح
+                                </button>
+                                {% endif %}
+
+                                <a href="{{ url_for('library.library') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> العودة إلى المكتبة
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if current_user.is_authenticated and (current_user.is_admin or current_user.id ==
+                    file.uploader_id) %}
+                    <div class="card border-warning">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="mb-0">خيارات الإدارة</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="btn-group">
+                                {% if current_user.is_admin %}
+                                <a href="{{ url_for('library.admin_library') }}" class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-cog"></i> إدارة الملفات
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

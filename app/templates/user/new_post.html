@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}إضافة منشور جديد - {{ current_user.username }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>إضافة منشور جديد</h4>
+                <p class="text-muted mb-0">جميع الحقول اختيارية - أضف محتوى واحد على الأقل</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">عنوان المنشور (اختياري)</label>
+                        <input type="text" class="form-control" id="title" name="title"
+                               placeholder="أضف عنواناً جذاباً للمنشور">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">محتوى المنشور (اختياري)</label>
+                        <textarea class="form-control" id="content" name="content" rows="5"
+                                  placeholder="اكتب محتوى المنشور هنا..."></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="image" class="form-label">صورة المنشور (اختياري)</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                <div class="form-text">الصيغ المدعومة: JPG, PNG, GIF</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="video" class="form-label">فيديو المنشور (اختياري)</label>
+                                <input type="file" class="form-control" id="video" name="video" accept="video/*">
+                                <div class="form-text">الصيغ المدعومة: MP4, MOV, AVI</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>ملاحظة:</strong> يمكنك إضافة عنوان فقط، أو نص فقط، أو صورة فقط، أو فيديو فقط، أو أي combination تريده!
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex">
+                        <button type="submit" class="btn btn-primary me-md-2">
+                            <i class="bi bi-check-circle"></i> نشر المنشور
+                        </button>
+                        <a href="{{ url_for('user_control.dashboard') }}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> إلغاء
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// التحقق من أن هناك محتوى على الأقل قبل الإرسال
+document.querySelector('form').addEventListener('submit', function(e) {
+    const title = document.getElementById('title').value.trim();
+    const content = document.getElementById('content').value.trim();
+    const image = document.getElementById('image').files[0];
+    const video = document.getElementById('video').files[0];
+    
+    if (!title && !content && !image && !video) {
+        e.preventDefault();
+        alert('يجب إضافة محتوى على الأقل (عنوان، نص، صورة، أو فيديو)');
+    }
+});
+</script>
+{% endblock %}
