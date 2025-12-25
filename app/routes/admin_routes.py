@@ -587,7 +587,7 @@ def login():
         # =========================
         # مدير كلية / مستخدم عادي
         # =========================
-        if not user:
+        if not user or not user.is_super_admin:
             if not faculty_id:
                 flash('يرجى اختيار الكلية')
                 return render_template('admin/login.html', faculties=faculties)
