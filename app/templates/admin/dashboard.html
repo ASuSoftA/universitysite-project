@@ -133,6 +133,18 @@
         <div class="row g-3">
 <div class="row g-3">
 
+  {% if current_user.is_super_admin %}
+<div class="col-md-4">
+    <a href="{{ url_for('admin_control.manage_faculties') }}" 
+       class="btn quick-btn w-100 btn-warning text-dark" 
+       style="animation-delay: 0.45s;">
+        <i class="bi bi-bank fs-4"></i>
+        إدارة الكليات
+    </a>
+</div>
+{% endif %}
+
+
     <!-- إضافة منشور جديد -->
     <div class="col-md-4">
         <a href="{{ url_for('admin_control.new_post') }}" 
@@ -196,7 +208,7 @@
 <div class="col-md-4">
     <a href="{{ url_for('admin_control.faculty_settings', faculty_id=1) }}" 
        class="btn quick-btn w-100 btn-dark text-white">
-        <i class="bi bi-building fs-4"></i>
+        <i class="bi bi-columns fs-4"></i>
         إعدادات صفحة الكلية
     </a>
 </div>

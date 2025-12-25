@@ -703,3 +703,28 @@ def faculty_settings():
         flash('تم تحديث بيانات الكلية بنجاح', 'success')
 
     return render_template('admin/faculty_settings.html', faculty=faculty)
+
+@admin_bp.route('/faculties', methods=['GET', 'POST'])
+@login_required
+def manage_faculties():
+    if not current_user.is_super_admin:
+        flash('غير مسموح لك بالدخول إلى هذه الصفحة')
+        return redirect(url_for('admin_control.dashboard'))
+
+    if request.method == 'POST':
+        name = request.form.get('name').strip()
+        if not name:
+            flash('يرجى إدخال اسم الكلية')
+        else:
+            existing = Faculty.query.filter_by(name=name).first()
+            if existing:
+                flash('هذه الكلية موجودة بالفعل')
+            else:
+                new_faculty = Faculty(name=name)
+                db.session.add(new_faculty)
+                db.session.commit()
+                flash(f'تمت إضافة الكلية: {name}')
+        return redirect(url_for('admin_control.manage_faculties'))
+
+    faculties = Faculty.query.order_by(Faculty.name).all()
+    return render_template('admin/faculties.html', faculties=faculties)
