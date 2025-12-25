@@ -31,7 +31,8 @@ def create_app():
         #from app.models.post import PostImage  # تأكد أن PostImage مستورد هنا
         from app.models.post import Post, PostImage, Like
         from app.models.faculty import Faculty
-    
+        from app.models.library import LibraryFile
+
         db.create_all()
 
         # ✅ إنشاء مستخدم admin افتراضي
