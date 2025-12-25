@@ -4,10 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2c3e50">
+
     <title>المساعد الذكي - الجامعة</title>
     <!-- إضافة أيقونات Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -26,6 +38,9 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
             position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-header {
@@ -60,14 +75,14 @@
             transform: translateY(-50%) scale(1.1);
         }
 
-        .chat-messages {
-            height: 400px;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            background-color: #f8f9fa;
-        }
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+}
 
         .message {
             margin-bottom: 15px;
@@ -229,22 +244,24 @@
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
 
-        // ... (الكود السابق يبقى كما هو)
+       function scrollToBottom() {
+        chatMessages.scrollTo({
+        top: chatMessages.scrollHeight,
+        behavior: 'smooth'
+    });
+}
 
-        function addMessage(message, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message');
-            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+       function addMessage(message, isUser = false) {
+           const messageDiv = document.createElement('div');
+           messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
 
-            // دعم النص الغامق Markdown-style
-            const formattedMessage = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            messageDiv.innerHTML = formattedMessage;
+           const formattedMessage = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+           messageDiv.innerHTML = formattedMessage;
 
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+           chatMessages.appendChild(messageDiv);
 
-        // ... (باقي الكود يبقى كما هو)
+    scrollToBottom();
+}
 
         function sendMessage() {
             const message = userInput.value.trim();
@@ -255,8 +272,9 @@
 // 🔥 مهم: إعادة التركيز لمنع اختفاء لوحة المفاتيح
             setTimeout(() => {
             userInput.focus();
+            scrollToBottom();
          }, 50);
-         
+    
             // إظهار مؤشر typing
             const typingIndicator = document.createElement('div');
             typingIndicator.classList.add('message', 'bot-message');
