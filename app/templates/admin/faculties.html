@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة الكليات{% endblock %}
+
+{% block content %}
+<h2>إدارة الكليات</h2>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="name">اسم الكلية</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">إضافة كلية</button>
+</form>
+
+
+<hr>
+
+<h3>الكليات الحالية</h3>
+<ul>
+    {% for faculty in faculties %}
+        <li>{{ faculty.name }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
