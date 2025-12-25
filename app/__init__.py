@@ -8,6 +8,7 @@ admin = Admin(name='لوحة التحكم', template_mode='bootstrap4')
 
 
 def create_app():
+    
     app = Flask(__name__)
     app.config.from_object('config.Config')
     app.config['SECRET_KEY'] = '123'
@@ -63,7 +64,6 @@ def create_app():
     app.register_blueprint(splash_bp)
     
     
-
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
@@ -72,5 +72,5 @@ def create_app():
     def chat_page():
         return render_template('chatbot.html')
 
-
+    
     return app
