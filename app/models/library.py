@@ -2,6 +2,7 @@ from app.extensions import db
 from datetime import datetime
 
 class LibraryFile(db.Model):
+    __tablename__ = "library"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)

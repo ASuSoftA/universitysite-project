@@ -62,6 +62,12 @@ def library():
     faculty_filter = request.args.get('faculty', type=int)
     search_query = request.args.get('q', '').strip()
 
+ # 1️⃣ إنشاء الفورم
+    form = LibraryFileForm()
+    
+    # 2️⃣ تعبئة الـ choices للكليات من قاعدة البيانات
+    form.faculty.choices = [(f.id, f.name) for f in Faculty.query.order_by(Faculty.name).all()]
+
     query = LibraryFile.query.filter_by(is_published=True)
 
     if file_type != 'all':
@@ -106,6 +112,7 @@ def library():
         current_search=search_query,
         current_faculty=faculty_filter,
         faculties=faculties,
+        form=form,
         courses=[c[0] for c in courses if c[0]]
     )
 
