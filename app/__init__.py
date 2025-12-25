@@ -6,7 +6,6 @@ from flask import  redirect, url_for
 # تهيئة لوحة التحكم
 admin = Admin(name='لوحة التحكم', template_mode='bootstrap4')
 
-
 def create_app():
     
     app = Flask(__name__)
