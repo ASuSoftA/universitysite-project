@@ -29,24 +29,46 @@
         }
 
         .chat-container {
-            display: flex;
-            flex-direction: column;
-            width: 400px;
-            height: 100vh;
-            max-height: 100vh;
-            background-color: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    height: 100vh; /* ارتفاع كامل الشاشة */
+    background-color: white;
+    border-radius: 0; /* اجعلها مربعة للهاتف */
+}
 
-        .chat-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-        }
+.chat-header {
+    flex: 0 0 auto; /* ثابت */
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.chat-messages {
+    flex: 1 1 auto; /* هذه المنطقة قابلة للتمرير */
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-input-container {
+    flex: 0 0 auto; /* ثابت أسفل الصفحة */
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #e0e0e0;
+    background-color: white;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+        
 
         .back-button {
             position: absolute;
@@ -63,15 +85,6 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-        }
-
-        .chat-messages {
-            flex: 1 1 auto;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            background-color: #f8f9fa;
         }
 
         .message {
@@ -99,16 +112,6 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        .chat-input-container {
-            display: flex;
-            gap: 10px;
-            padding: 12px;
-            border-top: 1px solid #e0e0e0;
-            background-color: white;
-            position: sticky;
-            bottom: 0;
         }
 
         .chat-input {
@@ -189,7 +192,7 @@ const chatMessages = document.getElementById('chatMessages');
 const userInput = document.getElementById('userInput');
 
 function scrollToBottom() {
-    chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+    chatMessages.scrollTop = chatMessages.scrollHeight; // تمرير تلقائي
 }
 
 function addMessage(message, isUser=false) {
@@ -197,8 +200,15 @@ function addMessage(message, isUser=false) {
     div.classList.add('message', isUser ? 'user-message' : 'bot-message');
     div.innerHTML = message;
     chatMessages.appendChild(div);
-    scrollToBottom();
+
+    scrollToBottom(); // تمرير تلقائي عند إضافة رسالة
 }
+
+// التركيز على الإدخال دون تغيير التمرير
+userInput.addEventListener('focus', ()=>{
+    setTimeout(scrollToBottom, 100); 
+});
+
 
 function sendMessage() {
     const msg = userInput.value.trim();
@@ -232,10 +242,6 @@ function sendMessage() {
           addMessage('عذرًا، حدث خطأ في الاتصال.');
       });
 }
-
-userInput.addEventListener('keypress', e=>{
-    if(e.key==='Enter') sendMessage();
-});
 
 // تمرير تلقائي عند التحميل
 window.addEventListener('load', ()=>{ scrollToBottom(); userInput.focus(); });
