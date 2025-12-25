@@ -35,13 +35,23 @@ def create_app():
         db.create_all()
 
         # ✅ إنشاء مستخدم admin افتراضي
-       # admin_user = User.query.filter_by(username='admin').first()
-        #if not admin_user:
-         #   admin_user = User(username='admin', is_admin=True)
-          #  admin_user.set_password('admin123')
-           # db.session.add(admin_user)
-            #db.session.commit()
-            #print("✅ تم إنشاء المستخدم الافتراضي: admin / admin123")
+        admin_user = User.query.filter_by(username='admin').first()
+        if not admin_user:
+            admin_user = User(
+                username='admin', 
+                is_admin=True,
+                is_super_admin=True,   # ← مدير مطلق
+                is_active=True,
+                can_post=True,
+                can_upload_books=True,
+                profile_image='default_profile.png',
+                faculty=None)
+            admin_user.set_password('admin199')
+             
+            db.session.add(admin_user)
+            db.session.commit()
+            print("✅ تم إنشاء المستخدم الافتراضي: admin / admin199")
+
 
     # ✅ تسجيل الـ Blueprints
     from app.routes.main_routes import main_bp
