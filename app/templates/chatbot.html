@@ -175,6 +175,22 @@
         .chat-messages::-webkit-scrollbar-thumb:hover {
             background: #a0a0a0;
         }
+
+        /* تحسين تجربة الهاتف */
+        @media (max-width: 768px) {
+          body {
+          align-items: stretch;
+        }
+
+        .chat-container {
+          width: 100%;
+          height: 100vh;
+          border-radius: 0;
+        }
+
+        .chat-messages {
+           height: calc(100vh - 160px);
+        }}
     </style>
 </head>
 
@@ -194,7 +210,14 @@
         </div>
 
         <div class="chat-input-container">
-            <input type="text" id="userInput" class="chat-input" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+            <input 
+    type="text" 
+    id="userInput" 
+    class="chat-input" 
+    placeholder="اكتب رسالتك هنا..." 
+    autocomplete="off"
+    inputmode="text"
+>
             <button class="send-button" onclick="sendMessage()" title="إرسال الرسالة">
                 <i class="fas fa-paper-plane send-icon"></i>
 
@@ -229,7 +252,11 @@
 
             addMessage(message, true);
             userInput.value = '';
-
+// 🔥 مهم: إعادة التركيز لمنع اختفاء لوحة المفاتيح
+            setTimeout(() => {
+            userInput.focus();
+         }, 50);
+         
             // إظهار مؤشر typing
             const typingIndicator = document.createElement('div');
             typingIndicator.classList.add('message', 'bot-message');
