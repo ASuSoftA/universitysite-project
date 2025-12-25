@@ -75,26 +75,26 @@ def library():
 
     if faculty_filter:
         query = query.filter(LibraryFile.faculty_id == faculty_filter)
-        
+
+    # 🔴 البحث النصي (هنا كان الخطأ)
     if search_query:
-     query = query.join(LibraryFile.faculty)  # join مع جدول الكليات
-    query = query.filter(
-        (LibraryFile.title.ilike(f'%{search_query}%')) |
-        (LibraryFile.description.ilike(f'%{search_query}%')) |
-        (LibraryFile.course.ilike(f'%{search_query}%')) |
-        (LibraryFile.semester.ilike(f'%{search_query}%')) |
-        (Faculty.name.ilike(f'%{search_query}%'))
-    )
+        query = query.join(LibraryFile.faculty)
+        query = query.filter(
+            (LibraryFile.title.ilike(f'%{search_query}%')) |
+            (LibraryFile.description.ilike(f'%{search_query}%')) |
+            (LibraryFile.course.ilike(f'%{search_query}%')) |
+            (LibraryFile.semester.ilike(f'%{search_query}%')) |
+            (Faculty.name.ilike(f'%{search_query}%'))
+        )
 
     faculties = Faculty.query.order_by(Faculty.name).all()
 
-    files = query.order_by(LibraryFile.created_at.desc())\
-             .paginate(page=1, per_page=10000)  # عدد كبير لعرض كل الملفات
+    files = query.order_by(LibraryFile.created_at.desc()) \
+        .paginate(page=page, per_page=20)
 
-    # المواد فقط من النتائج الحالية
-    courses = db.session.query(LibraryFile.course)\
-        .filter(LibraryFile.course.isnot(None))\
-        .distinct()\
+    courses = db.session.query(LibraryFile.course) \
+        .filter(LibraryFile.course.isnot(None)) \
+        .distinct() \
         .all()
 
     return render_template(
