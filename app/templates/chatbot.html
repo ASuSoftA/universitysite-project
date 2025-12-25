@@ -18,6 +18,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
@@ -29,46 +30,56 @@
         }
 
         .chat-container {
+    position: fixed;
+    inset: 0; /* top:0 right:0 bottom:0 left:0 */
+    background-color: #fff;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    height: 100vh; /* ارتفاع كامل الشاشة */
-    background-color: white;
-    border-radius: 0; /* اجعلها مربعة للهاتف */
 }
+
 
 .chat-header {
-    flex: 0 0 auto; /* ثابت */
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 10;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 
 .chat-messages {
-    flex: 1 1 auto; /* هذه المنطقة قابلة للتمرير */
+    position: absolute;
+    top: 64px;      /* تحت الهيدر */
+    bottom: 64px;   /* فوق مربع الإرسال */
+    left: 0;
+    right: 0;
     overflow-y: auto;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
+    padding: 12px;
+    background: #f8f9fa;
 }
+
 
 .chat-input-container {
-    flex: 0 0 auto; /* ثابت أسفل الصفحة */
-    display: flex;
-    padding: 10px;
-    border-top: 1px solid #e0e0e0;
-    background-color: white;
-    position: sticky;
+    position: fixed;
     bottom: 0;
-    z-index: 10;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    gap: 10px;
+    z-index: 1000;
 }
-
-        
+    
 
         .back-button {
             position: absolute;
@@ -173,8 +184,8 @@
         </a>
     </div>
 
-    <div class="chat-messages" id="chatMessages">
-        <div class="message bot-message">
+    <div class="chat-messages" id="chatMessages mt-9">
+        <div class="message bot-message mt-9">
             مرحبًا! 👋 أنا المساعد الذكي للجامعة. كيف يمكنني مساعدتك اليوم؟
         </div>
     </div>
@@ -192,32 +203,29 @@ const chatMessages = document.getElementById('chatMessages');
 const userInput = document.getElementById('userInput');
 
 function scrollToBottom() {
-    chatMessages.scrollTop = chatMessages.scrollHeight; // تمرير تلقائي
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function addMessage(message, isUser=false) {
+function addMessage(text, isUser=false) {
     const div = document.createElement('div');
-    div.classList.add('message', isUser ? 'user-message' : 'bot-message');
-    div.innerHTML = message;
+    div.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+    div.innerHTML = text;
     chatMessages.appendChild(div);
-
-    scrollToBottom(); // تمرير تلقائي عند إضافة رسالة
+    scrollToBottom();
 }
-
-// التركيز على الإدخال دون تغيير التمرير
-userInput.addEventListener('focus', ()=>{
-    setTimeout(scrollToBottom, 100); 
-});
-
 
 function sendMessage() {
     const msg = userInput.value.trim();
-    if(!msg) return;
+    if (!msg) return;
+
     addMessage(msg, true);
     userInput.value = '';
 
-    // إعادة التركيز لمنع اختفاء لوحة المفاتيح
-    setTimeout(()=>{ userInput.focus(); scrollToBottom(); }, 100);
+    setTimeout(() => {
+        userInput.focus();
+        scrollToBottom();
+    }, 0);
+}
 
     const typing = document.createElement('div');
     typing.classList.add('message', 'bot-message');
