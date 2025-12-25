@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_admin import Admin
 from app.extensions import db, login_manager
-from flask import  redirect, url_for
+from flask import redirect, url_for
 
 # تهيئة لوحة التحكم
 admin = Admin(name='لوحة التحكم', template_mode='bootstrap4')
@@ -31,7 +31,7 @@ def create_app():
         #from app.models.post import PostImage  # تأكد أن PostImage مستورد هنا
         from app.models.post import Post, PostImage, Like
         from app.models.faculty import Faculty
-
+    
         db.create_all()
 
         # ✅ إنشاء مستخدم admin افتراضي
@@ -80,6 +80,5 @@ def create_app():
     @app.route('/chat')
     def chat_page():
         return render_template('chatbot.html')
-
     
     return app
