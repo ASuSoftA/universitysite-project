@@ -41,12 +41,14 @@ class UniversityChatbot:
 
         if knowledge_result:
             response = self.format_response(knowledge_result)
-            # إضافة اقتراحات بعد الإجابة
             if len(self.conversation_history) > 2:
                 response += self.add_suggestions()
             return response
-
-        return self.get_fallback_response()
+        else:
+    # النصوص غير المفهومة ترجع اقتراحات مباشرة
+            fallback_response = self.get_fallback_response()
+            fallback_response += "\n" + "\n".join(university_data["الاقتراحات"]["مواضيع_مقترحة"])
+            return fallback_response
 
     def check_greetings(self, user_input):
         """التحقق من جميع أنواع التحية"""
