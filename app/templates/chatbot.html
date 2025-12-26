@@ -215,7 +215,7 @@ function sendMessage() {
   .then(data => {
     const t = document.getElementById('typing');
     if (t) t.remove();
-    addMessage(data.response || 'حدث خطأ في الخادم');
+    addMessage(data.response, false);
   })
   .catch(() => {
     const t = document.getElementById('typing');
