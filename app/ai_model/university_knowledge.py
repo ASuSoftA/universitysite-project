@@ -152,7 +152,7 @@ university_data = {
     }
 }
 
-def search_knowledge_improved(user_input):
+def search_knowledge(user_input):
     """البحث في قاعدة المعرفة بشكل أكثر دقة ومرونة"""
     user_input = user_input.lower().strip()
 
